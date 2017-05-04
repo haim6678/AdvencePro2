@@ -25,7 +25,7 @@ namespace WpfApp
     {
         private string port;
         private string ip;
-        private Communicator communicator;
+
 
         public delegate void ComError();
 
@@ -71,9 +71,6 @@ namespace WpfApp
         {
             this.port = por;
             this.ip = i;
-            communicator?.StopListenning();
-            communicator = new Communicator(port, ip);
-
             this.Show();
         }
 
@@ -106,16 +103,8 @@ namespace WpfApp
 
         private void HandleMulti()
         {
-            PreMultiWindow window = new PreMultiWindow();
-            window.NotifyStart += StartNewMulti; //todo leave here or move to multi view model?
-            window.Show();
-        }
-
-        private void StartNewMulti(string s)
-        {
-            MultiView multi = new MultiView(communicator, s);
-            multi.NotifyFinish += FinishGame;
-            Show();
+            MultiManager manager = new MultiManager(port, ip);
+            manager.NotifyFinish += FinishGame; //todo todo like this for single player
         }
     }
 

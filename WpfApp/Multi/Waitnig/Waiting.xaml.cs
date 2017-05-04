@@ -27,14 +27,14 @@ namespace WpfApp.Multi.Waitnig
         public Waiting()
         {
             InitializeComponent();
-            ViewModel = new WaitViewModel();
+           // ViewModel = new WaitViewModel();
           
         }
 
         
-        public void finish(string s)
+        /*public void finish(string s)
         {
             FinishWaiting?.Invoke(s, this);
-        }
+        }*/
     }
 }

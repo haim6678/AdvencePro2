@@ -31,7 +31,7 @@ namespace WpfApp.Multi
             if (arr.Length > 1)
             {
                 wait = new Waitnig.Waiting();
-
+                wait.ShowDialog();
                 model.NotifyMessege += HandleStart;
                 wait.ShowDialog();
                 model.StartGame(s);

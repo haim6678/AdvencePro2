@@ -20,9 +20,9 @@ namespace WpfApp.Multi
         public string Name { get; set; }
         public PreMultiModel model;
 
-        public PreMultiViewModel()
+        public PreMultiViewModel(Communicator co)
         {
-            model = new PreMultiModel();
+            model = new PreMultiModel(co);
             model.NotifyList += GetList;
 
             //todo handle reading exception

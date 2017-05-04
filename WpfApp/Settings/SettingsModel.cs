@@ -11,7 +11,7 @@ namespace WpfApp
 {
     class SettingsModel
     {
-        public delegate void Updated();
+        /*public delegate void Updated();
 
         public event Updated UpdateData;
 
@@ -70,6 +70,6 @@ namespace WpfApp
 
             return ((!ip.Equals(Ip)) || (!portNum.Equals(port)) || (!wid.Equals(width))
                     || (!algo.Equals(algoS)) || (!heigt.Equals(Height)));
-        }
+        }*/
     }
 }

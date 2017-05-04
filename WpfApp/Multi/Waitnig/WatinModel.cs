@@ -5,11 +5,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp.Multi.Waitnig
+namespace WpfApp .Multi.Waitnig
 {
     public class WatinModel
     {
-        public delegate void Notify();
+       /* public delegate void Notify();
 
         public event Notify RecivedGame;
         public string message { get; set; }
@@ -17,6 +17,6 @@ namespace WpfApp.Multi.Waitnig
 
         public WatinModel()
         {
-        }
+        }*/
     }
 }

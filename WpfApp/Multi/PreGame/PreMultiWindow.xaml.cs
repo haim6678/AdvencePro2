@@ -26,10 +26,10 @@ namespace WpfApp.Multi
         public event Notify NotifyStart;
 
 
-        public PreMultiWindow()
+        public PreMultiWindow(Communicator com)
         {
             InitializeComponent();
-            this.ViewModel = new PreMultiViewModel();
+            this.ViewModel = new PreMultiViewModel(com);
 
             this.DataContext = ViewModel;
         }

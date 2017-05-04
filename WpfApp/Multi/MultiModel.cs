@@ -104,9 +104,12 @@ namespace WpfApp.Multi
             KeepCom = res.KeepConnection;
             if (res.Command == Command.Close)
             {
-                FinishMessage = res.Data; //todo what is the data in this case
-                //todo need to check if play command failed?
+                FinishMessage = res.Data;    
                 NotifyFinish?.Invoke();
+            }
+            if (!res.Success)
+            {
+                //todo handle fail
             }
         }
 

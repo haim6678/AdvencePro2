@@ -33,7 +33,7 @@ namespace WpfApp.Single
 
         public PreSingleGameWindow()
         {
-           InitializeComponent();
+            InitializeComponent();
             viewModel = new PreViewModel();
             viewModel.Notif += StartGame;
             this.DataContext = viewModel;
@@ -46,12 +46,13 @@ namespace WpfApp.Single
 
         private void StartGame()
         {
+            this.Close();
             PressedOk?.Invoke(viewModel.Width, viewModel.Height, viewModel.Name);
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Close();
         }
     }
 }

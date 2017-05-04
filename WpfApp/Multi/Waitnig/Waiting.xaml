@@ -8,6 +8,6 @@
         Title="Waiting" Height="300" Width="300">
     <Grid>
         
-        
+        <Label Content="WAIT" Width="100" Height="100"></Label>
     </Grid>
 </Window>

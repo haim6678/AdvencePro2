@@ -9,7 +9,7 @@ namespace WpfApp.Single.PreGame
 {
     public class PreSingleModel
     {
-        public string GetWidth()
+       /* public string GetWidth()
         {
             return ConfigurationManager.AppSettings["Width"];
         }
@@ -17,6 +17,6 @@ namespace WpfApp.Single.PreGame
         public string GetHeight()
         {
             return ConfigurationManager.AppSettings["Height"];
-        }
+        }*/
     }
 }

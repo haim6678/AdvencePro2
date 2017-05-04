@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +23,8 @@ namespace WpfApp.Single.PreGame
         public PreViewModel()
         {
             model = new PreSingleModel();
-            Width = model.GetWidth();
-            Height = model.GetHeight();
+            Width = ConfigurationManager.AppSettings["Width"];
+            Height = ConfigurationManager.AppSettings["Height"];
         }
 
         public void PressedOk()

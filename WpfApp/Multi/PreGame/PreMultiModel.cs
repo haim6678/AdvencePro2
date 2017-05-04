@@ -15,33 +15,29 @@ namespace WpfApp.Multi
     public class PreMultiModel
     {
         public delegate void Notify();
-        public event Notify NotifyList ;
 
+        public event Notify NotifyList;
+        private Communicator com;
+        public string message { get; set; }
         public ObservableCollection<string> list;
-        public PreMultiModel()
+
+        public PreMultiModel(Communicator co)
         {
-            
+            com = co;
+            com.Received += ReceiveList;
+        }
+
+        private void ReceiveList(string s)
+        {
+            message = s;
+            NotifyList?.Invoke();
         }
 
         public void GetList()
         {
-            string portNumber = ConfigurationManager.AppSettings["PortNum"];
-            string ipNumber = ConfigurationManager.AppSettings["ip"];
-         
-             
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ipNumber), int.Parse(portNumber));
-            TcpClient client = new TcpClient();
-            client.Connect(ep);
-            NetworkStream stream = client.GetStream();
-            BinaryReader reader = new BinaryReader(stream);
-            BinaryWriter writer = new BinaryWriter(stream);
-
-            writer.Write("list");
-            string s = reader.ReadString();
-            //todo convert s tolist
-
-            NotifyList?.Invoke();
+            com.Send("list");
+            com.Listen();
+            //todo convert s to list
         }
-
     }
 }

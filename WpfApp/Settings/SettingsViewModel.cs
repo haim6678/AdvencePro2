@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -30,11 +31,11 @@ namespace WpfApp
         public SettingsViewModel()
         {
             settingsModel = new SettingsModel();
-            Ip = PrevIp = settingsModel.GetIp();
-            Port = PrevPort = settingsModel.GetPort();
-            Width = settingsModel.GetWidth();
-            Height = settingsModel.GetHeight();
-            SearchAlgo = settingsModel.GetSearchAlgo();
+            Ip = PrevIp = ConfigurationManager.AppSettings["Ip"];
+            Port = PrevPort = ConfigurationManager.AppSettings["Port"];
+            Width = ConfigurationManager.AppSettings["Width"];
+            Height = ConfigurationManager.AppSettings["Height"];
+            SearchAlgo = ConfigurationManager.AppSettings["Search Algo"];
         }
 
         public void ClickedOk()
@@ -51,19 +52,37 @@ namespace WpfApp
 
         private bool Changed()
         {
-            return settingsModel.CheckChanges(Ip, Port, Width, Height, SearchAlgo);
+            string portNum = ConfigurationManager.AppSettings["PortNum"];
+            string ip = ConfigurationManager.AppSettings["Ip"];
+            string width = ConfigurationManager.AppSettings["Width"];
+            string algoS = ConfigurationManager.AppSettings["SearchAlgo"];
+            string Height = ConfigurationManager.AppSettings["Height"];
+
+            return ((!ip.Equals(Ip)) || (!portNum.Equals(Port)) || (!Width.Equals(width))
+                    || (!SearchAlgo.Equals(algoS)) || (!Height.Equals(Height)));
         }
 
         private void SetVals()
         {
-            settingsModel.UpdateData += UpdatedBack;
-            settingsModel.SetApp(Port, Ip, Width, Height, SearchAlgo);
-        }
+            
+            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-        public void UpdatedBack()
-        {
+            configuration.AppSettings.Settings["Port"].Value = Port;
+            configuration.AppSettings.Settings["Ip"].Value = Ip;
+            configuration.AppSettings.Settings["Width"].Value = Width;
+            configuration.AppSettings.Settings["Height"].Value = Height;
+            configuration.AppSettings.Settings["SearchAlgo"].Value = SearchAlgo;
+
+            configuration.Save();
+            ConfigurationManager.RefreshSection("appSettings");
+
             NotifyChange?.Invoke();
         }
+
+        /*public void UpdatedBack()
+        {
+            NotifyChange?.Invoke();
+        }*/
 
         
     }

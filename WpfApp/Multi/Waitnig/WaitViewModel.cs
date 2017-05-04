@@ -8,7 +8,7 @@ namespace WpfApp.Multi.Waitnig
 {
     public class WaitViewModel
     {
-        public delegate void Notify(string s);
+        /*public delegate void Notify(string s);
 
         public event Notify Finished;
         public WatinModel model;
@@ -21,6 +21,6 @@ namespace WpfApp.Multi.Waitnig
         public void GotMessage()
         {
             Finished?.Invoke(model.message);
-        }
+        }*/
     }
 }
