@@ -1,0 +1,41 @@
+﻿<Window x:Class="Wpf.Multi.PreMultiWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:testing.Multi"
+        mc:Ignorable="d"
+        Title="PreMultiWindow" d:DesignHeight="600" d:DesignWidth="800">
+    <Grid Margin="20" Background="Bisque">
+        <Grid.ColumnDefinitions>
+
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="68*" />
+            <ColumnDefinition Width="67*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Background="Aquamarine" Foreground="Red" Content="List Of Game" Grid.Row="0" Grid.Column="0" Margin="0,0,0.4,18.8" Grid.RowSpan="2" />
+        <ComboBox Name="ListBox" ItemsSource="{Binding Path=List}" SelectedValue="Name"  DisplayMemberPath="List"
+                  Margin="241.6,0,244.6,18.8" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+        <Button Background="Aquamarine" Foreground="Black" Name="join" Click="Join_OnClick" Content="Join" Grid.Row="1"
+                Grid.Column="1" Margin="306.6,0.4,301.6,25.4" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+
+        <Label Content="Maze Name" Grid.Row="2" Margin="0,0.2,0.4,0.4" />
+        <TextBox Text="{Binding Name}" Margin="78,0.2,180.2,0.4" Grid.Row="2" Grid.ColumnSpan="2" />
+
+        <Label Content="Maze Row" Grid.Row="2" Margin="0,25.2,0.4,0" Grid.RowSpan="2" />
+        <TextBox Text="{Binding Width}" Grid.Row="2" Grid.ColumnSpan="2" Margin="78,25.2,180.2,0" Grid.RowSpan="2" />
+        <Label Content="Maze Col" Grid.Row="4" Margin="0,0,0.4,408.4" Grid.RowSpan="2" />
+        <TextBox Text="{Binding Height}" Grid.Row="4" Grid.ColumnSpan="2" Margin="78,0,180.2,408.4" Grid.RowSpan="2" />
+
+        <Button Grid.Row="5" Content="Start" Margin="56.6,0.4,180.2,383.4" Grid.Column="1" />
+    </Grid>
+</Window>
