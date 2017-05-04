@@ -27,9 +27,8 @@ namespace WpfApp.Multi
         {
             string portNumber = ConfigurationManager.AppSettings["PortNum"];
             string ipNumber = ConfigurationManager.AppSettings["ip"];
-
          
-
+             
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ipNumber), int.Parse(portNumber));
             TcpClient client = new TcpClient();
             client.Connect(ep);
