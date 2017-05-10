@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp.Multi;
+using WpfApp.Settings;
 using WpfApp.Single;
 
 namespace WpfApp
@@ -55,23 +56,10 @@ namespace WpfApp
 
         public void HandleSetting()
         {
-            SettingView settingView = new SettingView(port, ip);
-            settingView.notify += HandleSettingChanged;
-            settingView.Finish += FinishSetting;
-            this.Hide();
+            SettingsModel m = new SettingsModel();
+            SettingsViewModel vm = new SettingsViewModel(m);
+            SettingsView settingView = new SettingsView(vm);
             settingView.ShowDialog();
-        }
-
-        private void FinishSetting()
-        {
-            this.Show();
-        }
-
-        private void HandleSettingChanged(string por, string i)
-        {
-            this.port = por;
-            this.ip = i;
-            this.Show();
         }
 
         #endregion
@@ -81,7 +69,7 @@ namespace WpfApp
         public void HandleSingle()
         {
             PreSingleGameWindow PreGame = new PreSingleGameWindow();
-            PreGame.PressedOk += StartSingle; //todo not better to move this to the single view model??
+            PreGame.PressedOk += StartSingle; 
             PreGame.Show();
         }
 
@@ -89,13 +77,9 @@ namespace WpfApp
         {
             SinglePlayerView singlePlayer = new SinglePlayerView(name, width, height);
             singlePlayer.Title = name;
-            singlePlayer.GameEnded += FinishGame;
             this.Show();
         }
 
-        private void FinishGame()
-        {
-        }
 
         #endregion
 

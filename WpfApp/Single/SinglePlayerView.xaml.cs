@@ -20,23 +20,16 @@ namespace WpfApp.Single
     public partial class SinglePlayerView : Window
     {
         public delegate void NotifyFinish();
-        public event NotifyFinish GameEnded;
+
         public SinglePlayerViewModel ViewModel;
 
-        public SinglePlayerView(string name,string width,string height)
+        public SinglePlayerView(SinglePlayerViewModel vm)
         {
             InitializeComponent();
-            this.ViewModel = new SinglePlayerViewModel();
-            ViewModel.NotifFinish += Finish;
+            this.ViewModel = vm;
             this.DataContext = ViewModel;
-            ViewModel.StartSingle(name,width,height);
         }
 
-        private void Finish()
-        {
-            this.Close();
-            GameEnded?.Invoke();
-        }
 
         private void SinglePlayerView_OnKeyUp(object sender, KeyEventArgs e)
         {
@@ -48,7 +41,6 @@ namespace WpfApp.Single
 
         #region buttons
 
-        
         private void Solve_OnClick(object sender, RoutedEventArgs e)
         {
             ViewModel.Solve();
@@ -64,6 +56,7 @@ namespace WpfApp.Single
         {
             ViewModel.BackToMenu();
         }
+
         #endregion
     }
 }

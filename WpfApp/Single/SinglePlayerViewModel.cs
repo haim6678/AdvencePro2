@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,31 +11,57 @@ using WpfApp.Single.Confirm;
 
 namespace WpfApp
 {
-    public class SinglePlayerViewModel
+    public class SinglePlayerViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private SinglePlayerModel model;
 
-        public delegate void Notify();
-        public event Notify NotifFinish;
 
         private Position p { get; set; }
-        private Maze m { get; set; } 
-        public string Name { get; set; }
-        public string Width { get; set; }
-        public string Height { get; set; }
+        private Maze m { get; set; }
 
-        public SinglePlayerViewModel()
+
+        public SinglePlayerViewModel(SinglePlayerModel mod)
         {
-            model = new SinglePlayerModel();
-
-            model.HandleFinish += HandleFinish;
+            model = mod;
+            model.PropertyChanged += Model_PropertyChanged;
         }
 
-        #region start
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VM_" + e.PropertyName));
+        }
+
+        #region properties
+
+        public string VM_Name
+        {
+            get { return model.Name; }
+            set { model.Name = value; }
+        }
+
         
+
+        public string VM_Width
+        {
+            get { return model.Width; }
+            set { model.Width = value; }
+        }
+
+
+        public string VM_Height
+        {
+            get { return model.Height; }
+            set { model.Height = value; }
+        }
+
+        #endregion
+
+        #region start
+
         public void StartSingle(string name, string widt, string heigh)
         {
-            this.Name = name;
             model.Message += CreateMaze;
             model.start(name, widt, heigh);
         }
@@ -58,53 +85,7 @@ namespace WpfApp
 
         public void HandleMovement(Key k)
         {
-            //todo call the model or do this here??
-
-            Position pos = HandleMove(k);
-            if ((pos.Col != -1) && (pos.Row != -1))
-            {
-                p = pos;
-                //todo check here if win
-
-                //todo draw new loc
-            }
-        }
-
-        public Position HandleMove(Key k)
-        {
-            Position pos = new Position(-1, -1);
-
-            switch (k)
-            {
-                case Key.Up:
-                    if ((p.Row + 1 < m.Rows) && (m[p.Row + 1, p.Col] == CellType.Free))
-                    {
-                        pos = new Position(p.Row + 1, p.Col);
-                    }
-                    break;
-                case Key.Down:
-                    if ((p.Row - 1 >= 0) && (m[p.Row - 1, p.Col] == CellType.Free))
-                    {
-                        pos = new Position(p.Row - 1, p.Col);
-                    }
-                    break;
-                case Key.Left:
-                    if ((p.Col - 1 >= 0) && (m[p.Row, p.Col - 1] == CellType.Free))
-                    {
-                        pos = new Position(p.Row, p.Col - 1);
-                    }
-                    break;
-                case Key.Right:
-                    if ((p.Col + 1 < m.Cols) && (m[p.Row, p.Col + 1] == CellType.Free))
-                    {
-                        pos = new Position(p.Row, p.Col + 1);
-                    }
-                    break;
-                default:
-                    pos = new Position(-1, -1);
-                    break;
-            }
-            return pos;
+            model.HandleMovement(k);
         }
 
         #endregion
@@ -128,7 +109,7 @@ namespace WpfApp
         #endregion
 
         #region resatrt
-    
+
         public void Restart()
         {
             ConfirmWindow confirm = new ConfirmWindow();
@@ -169,22 +150,7 @@ namespace WpfApp
 
             NotifFinish?.Invoke();
         }
-        #endregion
 
-        public void HandleFinish(string s)
-        {
-            switch (s)
-            {
-                case "you quit":
-                    //todo display
-                    break;
-                case "you win":
-                    //todo display
-                    break;
-                default:
-                    break;
-            }
-            NotifFinish?.Invoke();
-        }
+        #endregion
     }
 }

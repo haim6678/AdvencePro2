@@ -1,4 +1,4 @@
-﻿<Window x:Class="WpfApp.SettingView"
+﻿<Window x:Class="WpfApp.Settings.SettingsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -20,18 +20,18 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Background="Coral" Foreground="WhiteSmoke" Margin="150,50,0,0">IP:</Label>
-        <TextBox Grid.Column="1" Margin="0,50,392.6,24.8" Name="Ip" Grid.RowSpan="2"  Text= "{Binding Ip}"/>
+        <TextBox Grid.Column="1" Margin="0,50,392.6,24.8" Name="Ip" Grid.RowSpan="2"  Text= "{Binding VM_IP}"/>
         <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="1" Margin="150,0,0,0">PORT:</Label>
-        <TextBox Name="Port" Margin="0,0.4,392.6,0.2" Grid.Column="1" Grid.Row="1" Text= "{Binding Port}"></TextBox>
+        <TextBox Name="Port" Margin="0,0.4,392.6,0.2" Grid.Column="1" Grid.Row="1" Text="{Binding VM_Port}"></TextBox>
         <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="2" Margin="150,0,0,0">WIDTH:</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Name="Width" Margin="0,0.4,392.6,0.2" Text="{Binding Width}"></TextBox>
+        <TextBox Grid.Row="2" Grid.Column="1" Name="Width" Margin="0,0.4,392.6,0.2" Text="{Binding VM_MazeWidth}"></TextBox>
         <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="3" Margin="150,0,0,0">HEIGHT:</Label>
-        <TextBox Grid.Row="3" Grid.Column="1" Name="Height" Margin="0,0.4,392.6,0.2" Text="{Binding Height}"></TextBox>
+        <TextBox Grid.Row="3" Grid.Column="1" Name="Height" Margin="0,0.4,392.6,0.2" Text="{Binding VM_MazeHeight}"></TextBox>
         <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="4" Margin="150,0,0,0">SEARCHALGO:</Label>
-        <TextBox Grid.Row="4" Grid.Column="1" Name="SearchAlgo"  Margin="0,0.4,392.6,0.2" Text="{Binding SearchAlgo}"></TextBox>
+        <TextBox Grid.Row="4" Grid.Column="1" Name="SearchAlgo"  Margin="0,0.4,392.6,0.2" Text="{Binding VM_SearchAlgorithm}"></TextBox>
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2">
-            <Button Name="OkButton" Foreground="Green"  Content="Ok" Margin="250,20,420,0" Click="OkButton_OnClick" ></Button>
-            <Button Name="Cancel"  Foreground="Green" Content="Cancel" Click="Cancel_OnClick" Margin="250,2,420,0" ></Button>
+            <Button Name="OkButton" Foreground="Green"  Content="Ok" Margin="250,20,420,0" Click="OkButton_Click" />
+            <Button Name="Cancel"  Foreground="Green" Content="Cancel" Margin="250,2,420,0" Click="Cancel_Click" />
         </StackPanel>
     </Grid>
 </Window>

@@ -21,33 +21,18 @@ namespace WpfApp.Single
     /// </summary>
     public partial class PreSingleGameWindow : Window
     {
-        public delegate void Start(string width, string height, string name);
+        private PreViewModel viewModel { get; set; }
 
-        public event Start PressedOk;
-
-        public delegate void finish();
-
-        public event finish PressedCancel;
-
-        private PreViewModel viewModel;
-
-        public PreSingleGameWindow()
+        public PreSingleGameWindow(PreViewModel vm)
         {
             InitializeComponent();
-            viewModel = new PreViewModel();
-            viewModel.Notif += StartGame;
+            viewModel = vm;
             this.DataContext = viewModel;
         }
 
         private void OkButton_OnClick(object sender, RoutedEventArgs e)
         {
             viewModel.PressedOk();
-        }
-
-        private void StartGame()
-        {
-            this.Close();
-            PressedOk?.Invoke(viewModel.Width, viewModel.Height, viewModel.Name);
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)

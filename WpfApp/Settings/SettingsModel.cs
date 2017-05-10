@@ -2,74 +2,124 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp
+namespace WpfApp.Settings
 {
-    class SettingsModel
+    public class SettingsModel : INotifyPropertyChanged
     {
-        /*public delegate void Updated();
-
-        public event Updated UpdateData;
-
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public SettingsModel()
         {
+            // initialize default fields by the app settings data.
+            this.IP = SettingsManager.Instance.ReadSetting(Settings.IP);
+            this.Port = ushort.Parse(SettingsManager.Instance.ReadSetting(Settings.Port));
+            this.MazeWidth = uint.Parse(SettingsManager.Instance.ReadSetting(Settings.Width));
+            this.MazeHeight = uint.Parse(SettingsManager.Instance.ReadSetting(Settings.Height));
+            this.SearchAlgorithm = byte.Parse(SettingsManager.Instance.ReadSetting(Settings.SearchAlgorithm));
         }
 
-        public string GetPort()
+        /// <summary>
+        /// the ip property
+        /// </summary>
+        private string ip;
+        public string IP
         {
-            return ConfigurationManager.AppSettings["PortNum"];
+            get
+            {
+                return this.ip;
+            }
+            set
+            {
+                if (this.ip != value)
+                {
+                    this.ip = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IP"));
+                }
+            }
         }
 
-        public string GetIp()
+        /// <summary>
+        /// the port property
+        /// </summary>
+        private ushort port;
+        public ushort Port
         {
-            return ConfigurationManager.AppSettings["Ip"];
+            get
+            {
+                return this.port;
+            }
+            set
+            {
+                if (this.port != value)
+                {
+                    this.port = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Port"));
+                }
+            }
         }
 
-        public string GetSearchAlgo()
+        private uint width;
+        public uint MazeWidth
         {
-            return ConfigurationManager.AppSettings["SearchAlgo"];
+            get
+            {
+                return this.width;
+            }
+            set
+            {
+                if (this.width != value)
+                {
+                    this.width = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MazeWidth"));
+                }
+            }
         }
 
-        public string GetWidth()
+        private uint height;
+        public uint MazeHeight
         {
-            return ConfigurationManager.AppSettings["Width"];
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                if (this.height != value)
+                {
+                    this.height = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MazeHeight"));
+                }
+            }
         }
 
-        public string GetHeight()
+        private byte searchAlg;
+        public byte SearchAlgorithm
         {
-            return ConfigurationManager.AppSettings["Height"];
+            get
+            {
+                return this.searchAlg;
+            }
+            set
+            {
+                if (this.searchAlg != value)
+                {
+                    this.searchAlg = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchAlgorithm"));
+                }
+            }
         }
 
-        public void SetApp(string Port, string Ip, string Width, string Height, string SearchAlgo)
+        public void SaveSettings()
         {
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            configuration.AppSettings.Settings["Port"].Value = Port;
-            configuration.AppSettings.Settings["Ip"].Value = Ip;
-            configuration.AppSettings.Settings["Width"].Value = Width;
-            configuration.AppSettings.Settings["Height"].Value = Height;
-            configuration.AppSettings.Settings["SearchAlgo"].Value = SearchAlgo;
-
-            configuration.Save();
-            ConfigurationManager.RefreshSection("appSettings");
-
-            UpdateData?.Invoke();
+            SettingsManager.Instance.UpdateSetting(Settings.IP, IP);
+            SettingsManager.Instance.UpdateSetting(Settings.Port, Port.ToString());
+            SettingsManager.Instance.UpdateSetting(Settings.Width, MazeWidth.ToString());
+            SettingsManager.Instance.UpdateSetting(Settings.Height, MazeHeight.ToString());
+            SettingsManager.Instance.UpdateSetting(Settings.SearchAlgorithm, SearchAlgorithm.ToString());
         }
-
-        public bool CheckChanges(string ip, string port, string wid, string heigt, string algo)
-        {
-            string portNum = ConfigurationManager.AppSettings["PortNum"];
-            string Ip = ConfigurationManager.AppSettings["Ip"];
-            string width = ConfigurationManager.AppSettings["Width"];
-            string algoS = ConfigurationManager.AppSettings["SearchAlgo"];
-            string Height = ConfigurationManager.AppSettings["Height"];
-
-            return ((!ip.Equals(Ip)) || (!portNum.Equals(port)) || (!wid.Equals(width))
-                    || (!algo.Equals(algoS)) || (!heigt.Equals(Height)));
-        }*/
     }
 }

@@ -8,82 +8,71 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp
+namespace WpfApp.Settings
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : INotifyPropertyChanged
     {
-        public delegate void Notify();
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public event Notify NotifyChange;
-        public event Notify NotifyFinish;
+        private SettingsModel model;
 
-
-        public string PrevIp { get; set; }
-        public string PrevPort { get; set; }
-
-        public string Ip { get; set; }
-        public string Port { get; set; }
-        public string Width { get; set; }
-        public string Height { get; set; }
-        public string SearchAlgo { get; set; }
-        private SettingsModel settingsModel;
-
-        public SettingsViewModel()
+        public SettingsViewModel(SettingsModel model)
         {
-            settingsModel = new SettingsModel();
-            Ip = PrevIp = ConfigurationManager.AppSettings["Ip"];
-            Port = PrevPort = ConfigurationManager.AppSettings["Port"];
-            Width = ConfigurationManager.AppSettings["Width"];
-            Height = ConfigurationManager.AppSettings["Height"];
-            SearchAlgo = ConfigurationManager.AppSettings["Search Algo"];
+            this.model = model;
+            model.PropertyChanged += Model_PropertyChanged;
+            LoadInitialDataFromModel();
         }
 
-        public void ClickedOk()
+        private void LoadInitialDataFromModel()
         {
-            if (Changed())
-            {
-                SetVals();
-            }
-            else
-            {
-                NotifyFinish?.Invoke();
-            }   
+            this.VM_IP = model.IP;
+            this.VM_Port = model.Port;
+            this.VM_MazeWidth = model.MazeWidth;
+            this.VM_MazeHeight = model.MazeWidth;
+            this.VM_SearchAlgorithm = model.SearchAlgorithm;
         }
 
-        private bool Changed()
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            string portNum = ConfigurationManager.AppSettings["PortNum"];
-            string ip = ConfigurationManager.AppSettings["Ip"];
-            string width = ConfigurationManager.AppSettings["Width"];
-            string algoS = ConfigurationManager.AppSettings["SearchAlgo"];
-            string Height = ConfigurationManager.AppSettings["Height"];
-
-            return ((!ip.Equals(Ip)) || (!portNum.Equals(Port)) || (!Width.Equals(width))
-                    || (!SearchAlgo.Equals(algoS)) || (!Height.Equals(Height)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VM_" + e.PropertyName));
         }
 
-        private void SetVals()
+        public string VM_IP
         {
-            
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
-            configuration.AppSettings.Settings["Port"].Value = Port;
-            configuration.AppSettings.Settings["Ip"].Value = Ip;
-            configuration.AppSettings.Settings["Width"].Value = Width;
-            configuration.AppSettings.Settings["Height"].Value = Height;
-            configuration.AppSettings.Settings["SearchAlgo"].Value = SearchAlgo;
-
-            configuration.Save();
-            ConfigurationManager.RefreshSection("appSettings");
-
-            NotifyChange?.Invoke();
+            get { return model.IP; }
+            set { model.IP = value; }
         }
 
-        /*public void UpdatedBack()
-        {
-            NotifyChange?.Invoke();
-        }*/
 
-        
+        public ushort VM_Port
+        {
+            get { return model.Port; }
+            set { model.Port = value; }
+        }
+
+
+        public uint VM_MazeWidth
+        {
+            get { return model.MazeWidth; }
+            set { model.MazeWidth = value; }
+        }
+
+
+        public uint VM_MazeHeight
+        {
+            get { return model.MazeHeight; }
+            set { model.MazeHeight = value; }
+        }
+
+        public byte VM_SearchAlgorithm
+        {
+            get { return model.SearchAlgorithm; }
+            set { model.SearchAlgorithm = value; }
+        }
+
+        public void OkPressed()
+        {
+            model.SaveSettings();
+        }
     }
 }

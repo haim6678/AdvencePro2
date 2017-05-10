@@ -30,7 +30,7 @@
                      Text="{Binding Name}" />
             <StackPanel Grid.Row="5" Grid.ColumnSpan="2">
                 <Button Name="OkButton" Content="Ok" Margin="250,20,420,0" Click="OkButton_OnClick" />
-                <Button Name="Cancel" Content="Cancel" Click="Cancel_OnClick" Margin="250,2,420,0" />
+                <Button Name="Cancel" Content="Cancel" Click="Cancel_OnClick"  Margin="250,2,420,0" />
             </StackPanel>
         </Grid>
     </Grid>

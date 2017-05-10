@@ -48,5 +48,10 @@ namespace testing.Single
         {
             PressedOk?.Invoke(viewModel.Width, viewModel.Height, viewModel.Name);
         }
+
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

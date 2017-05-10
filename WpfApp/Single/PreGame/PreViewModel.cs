@@ -1,40 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp.Annotations;
 
 namespace WpfApp.Single.PreGame
 {
-
-  
-    public class PreViewModel
+    public class PreViewModel : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public string Height { get; set; }
-        public string Width { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public delegate void Notify();
-
-        public event Notify Notif;
 
         private PreSingleModel model;
-        public PreViewModel()
+
+        public PreViewModel(PreSingleModel Mod)
         {
             model = new PreSingleModel();
-            Width = ConfigurationManager.AppSettings["Width"];
-            Height = ConfigurationManager.AppSettings["Height"];
+            model = Mod;
+            model.PropertyChanged += Model_PropertyChanged;
         }
 
         public void PressedOk()
         {
             //todo if didnt enter name - handle
+            model.Start();
+        }
 
-            Notif?.Invoke();
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VM_" + e.PropertyName));
+        }
+
+        public string VM_Width
+        {
+            get { return model.Width; }
+            set { model.Width = value; }
+        }
+
+        public string VM_Height
+        {
+            get { return model.Height; }
+            set { model.Height = value; }
         }
     }
-
-
-    
 }

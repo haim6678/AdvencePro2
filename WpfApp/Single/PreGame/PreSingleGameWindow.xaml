@@ -22,12 +22,12 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="2" Margin="150,100,0,0">WIDTH:</Label>
-            <TextBox Grid.Row="2" Grid.Column="1" Name="width" Margin="0.2,100,392.6,0.6" Text="{Binding Width}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Name="width" Margin="0.2,100,392.6,0.6" Text="{Binding VM_Width}" />
             <Label Grid.Row="3" Margin="150,0,0,0">HEIGHT:</Label>
-            <TextBox Grid.Row="3" Grid.Column="1" Name="height" Margin="0,0.4,392.6,0.2" Text="{Binding  Height}" />
+            <TextBox Grid.Row="3" Grid.Column="1" Name="height" Margin="0,0.4,392.6,0.2" Text="{Binding  VM_Height}" />
             <Label Grid.Row="4" Margin="150,0,0,0">NAME:</Label>
             <TextBox Grid.Row="4" Grid.Column="1"  Name="name" Margin="0,0.4,392.6,0.2"
-                     Text="{Binding Name}" />
+                     Text="{Binding VM_Name}" />
             <StackPanel Grid.Row="5" Grid.ColumnSpan="2">
                 <Button Name="OkButton" Content="Ok" Margin="250,20,420,0" Click="OkButton_OnClick" />
                 <Button Name="Cancel" Content="Cancel" Click="Cancel_OnClick" Margin="250,2,420,0" />
