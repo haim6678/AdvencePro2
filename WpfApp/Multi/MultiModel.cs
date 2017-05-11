@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using SharedData;
+using WpfApp.Single.Confirm;
 
 
 namespace WpfApp.Multi
@@ -17,22 +19,28 @@ namespace WpfApp.Multi
         public delegate void Notify();
 
         public event Notify NotifyMessege;
-
+        public string StartInfo { get; set; }
         public bool KeepCom;
         private Communicator com;
         public string FinishMessage { get; private set; }
         public string MessageData { get; private set; }
+        private ConfirmWindow confirm;
 
-        public MultiModel(Communicator c)
+        public MultiModel(Communicator c, string s)
         {
             KeepCom = true;
+            StartInfo = s;
             com = c;
             com.Received += HandleServerMassege;
         }
 
-        public void HandleMyMovement(string s)
+        public void HandleMyMovement(Key k)
         {
-            com.Send("play" + " " + s);
+            string s = Movement(k);
+            if (!s.Equals("ignore"))
+            {
+                com.Send("play " + s);
+            }
         }
 
         public void StartListening()
@@ -47,17 +55,12 @@ namespace WpfApp.Multi
             t.Start();
         }
 
-        public void StartGame(string s)
+        public void StartGame()
         {
-            com.Send(s);
+            com.Send(StartInfo);
             StartListening();
         }
 
-        public void JoinGame(string s)
-        {
-            com.Send("join" + " " + s);
-            StartListening();
-        }
 
         private void HandleServerMassege(string s)
         {
@@ -93,29 +96,74 @@ namespace WpfApp.Multi
             NotifyMessege?.Invoke();
         }
 
-        private void HandleClose(string data)
+        public void HandleClose(string data)
         {
             KeepCom = false;
+            FinishMessage = data;
             NotifyFinish?.Invoke();
         }
+
 
         private void HandleCommandRes(CommandResult res)
         {
             KeepCom = res.KeepConnection;
             if (res.Command == Command.Close)
             {
-                FinishMessage = res.Data;    
-                NotifyFinish?.Invoke();
+                HandleClose(res.Data);
             }
             if (!res.Success)
             {
-                //todo handle fail
+                //todo handle command fail
             }
+        }
+
+        public string Movement(Key k)
+        {
+            string s;
+            switch (k)
+            {
+                case Key.Up:
+                    s = "up";
+                    break;
+                case Key.Down:
+                    s = "down";
+                    break;
+                case Key.Left:
+                    s = "left";
+                    break;
+                case Key.Right:
+                    s = "right";
+                    break;
+                default:
+                    s = "ignore";
+                    break;
+            }
+            return s;
         }
 
         private void HandleOtherMovement(string s)
         {
-           NotifyMessege?.Invoke();
+            this.MessageData = s;
+            NotifyMessege?.Invoke();
+        }
+
+        public void BackToMenu()
+        {
+            confirm = new ConfirmWindow();
+            confirm.NotifCancel += HandleCancel;
+            confirm.NotifOk += HandleBack;
+            confirm.ShowDialog();
+        }
+
+        private void HandleBack()
+        {
+            confirm.Close();
+            HandleClose("you quit");
+        }
+
+        private void HandleCancel()
+        {
+            confirm.Close();
         }
     }
 }

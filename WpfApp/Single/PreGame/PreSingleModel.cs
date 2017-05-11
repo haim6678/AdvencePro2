@@ -52,6 +52,21 @@ namespace WpfApp.Single.PreGame
             }
         }
 
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (value != name)
+                {
+                    name = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+                }
+            }
+        }
+
         public void Start()
         {
             NotifStart?.Invoke();

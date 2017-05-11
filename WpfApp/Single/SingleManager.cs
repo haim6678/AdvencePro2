@@ -23,14 +23,21 @@ namespace WpfApp.Single
             preModel.NotifStart += Manage;
             preVM = new PreViewModel(preModel);
             pre = new PreSingleGameWindow(preVM);
+        }
+
+        public void Start()
+        {
             pre.ShowDialog();
         }
 
-        public void Manage()
+        private void Manage()
         {
             pre.Close();
 
             model = new SinglePlayerModel();
+            model.Width = preModel.Width;
+            model.Height = preModel.Height;
+            model.Name = preModel.Name;
             model.HandleFinish += Finish;
             SingleVM = new SinglePlayerViewModel(model);
             SingleView = new SinglePlayerView(SingleVM);

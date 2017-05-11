@@ -46,5 +46,10 @@ namespace WpfApp.Single.PreGame
             get { return model.Height; }
             set { model.Height = value; }
         }
+        public string VM_Name
+        {
+            get { return model.Name; }
+            set { model.Name = value; }
+        }
     }
 }

@@ -68,18 +68,9 @@ namespace WpfApp
 
         public void HandleSingle()
         {
-            PreSingleGameWindow PreGame = new PreSingleGameWindow();
-            PreGame.PressedOk += StartSingle; 
-            PreGame.Show();
+            SingleManager manager = new SingleManager();
+            manager.Start();
         }
-
-        public void StartSingle(string width, string height, string name)
-        {
-            SinglePlayerView singlePlayer = new SinglePlayerView(name, width, height);
-            singlePlayer.Title = name;
-            this.Show();
-        }
-
 
         #endregion
 
@@ -88,7 +79,8 @@ namespace WpfApp
         private void HandleMulti()
         {
             MultiManager manager = new MultiManager(port, ip);
-            manager.NotifyFinish += FinishGame; //todo todo like this for single player
+            manager.Start();
+            manager.NotifyFinish += ; //todo todo like this for single player
         }
     }
 

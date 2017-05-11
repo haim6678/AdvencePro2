@@ -21,22 +21,13 @@ namespace WpfApp.Multi
     {
         private MultiViewModel viewModel;
 
-        public delegate void Notify();
 
-        public event Notify NotifyFinish;
-
-        public MultiView(Communicator c, string s)
+        public MultiView(MultiViewModel vm)
         {
             InitializeComponent();
-            viewModel = new MultiViewModel(c, s);
-            viewModel.NotifyFinish += HandleFinish;
+            viewModel = vm;
         }
 
-        private void HandleFinish()
-        {
-            this.Close();
-            NotifyFinish?.Invoke();
-        }
 
         private void Menu_OnClick(object sender, RoutedEventArgs e)
         {

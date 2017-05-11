@@ -1,49 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfApp.Multi
 {
-    public class PreMultiViewModel
+    public class PreMultiViewModel : INotifyPropertyChanged
     {
-        public delegate void StartGame(string s);
-
-
-        public event StartGame NotifyStart;
-
-        public ObservableCollection<string> List { get; set; }
-        public string Width { get; set; }
-        public string Height { get; set; }
-        public string Name { get; set; }
         public PreMultiModel model;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public PreMultiViewModel(Communicator co)
+        public PreMultiViewModel(PreMultiModel mod)
         {
-            model = new PreMultiModel(co);
-            model.NotifyList += GetList;
-
-            //todo handle reading exception
-            model.GetList();
+            model = mod;
+            model.PropertyChanged += Model_PropertyChanged;
+            mod.GetList();
         }
 
-        private void GetList()
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            List = this.model.list;
-            model.NotifyList -= GetList;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VM_" + e.PropertyName));
         }
 
         public void JoinClick()
         {
-            NotifyStart?.Invoke(Name);
+            model.StartGame("join");
         }
 
         public void Start()
         {
             //todo check if he input the fields or it's empty!
-            NotifyStart?.Invoke(Name + " " + Width + " " + Height);
+            model.StartGame("start");
         }
+
+        #region properties
+
+        public ObservableCollection<string> VM_List
+        {
+            get { return model.List; }
+            set { model.List = value; }
+        }
+
+        public string VM_Width
+        {
+            get { return model.Width; }
+            set { model.Width = value; }
+        }
+
+        public string VM_Height
+        {
+            get { return model.Height; }
+            set { model.Height = value; }
+        }
+
+        public string VM_Name
+        {
+            get { return model.Name; }
+            set { model.Name = value; }
+        }
+
+        #endregion
     }
 }

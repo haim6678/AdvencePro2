@@ -16,39 +16,32 @@ namespace WpfApp.Multi
         public Maze m;
         private Waitnig.Waiting wait;
 
-        public delegate void Notify();
 
-        public event Notify NotifyFinish;
-
-
-        public MultiViewModel(Communicator com, string s)
+        public MultiViewModel(MultiModel mod)
         {
-            model = new MultiModel(com);
-            model.NotifyFinish += HandelFinish;
-            string[] arr = s.Split(' ');
+            model = mod;
+            string[] arr = model.StartInfo.Split(' ');
 
             //case start
             if (arr.Length > 1)
             {
                 wait = new Waitnig.Waiting();
-                wait.ShowDialog();
                 model.NotifyMessege += HandleStart;
+                model.StartGame();
                 wait.ShowDialog();
-                model.StartGame(s);
             }
             //case join
             else
             {
-                model.JoinGame(s);
+                model.StartGame();
                 model.NotifyMessege += HandleJoin;
             }
         }
 
-        private void HandelFinish()
+
+        public void Movement(Key k)
         {
-            string s = model.FinishMessage;
-            //todo display message
-            NotifyFinish?.Invoke();
+            model.HandleMyMovement(k);
         }
 
         private void HandleStart()
@@ -63,7 +56,6 @@ namespace WpfApp.Multi
         {
             model.NotifyMessege -= HandleJoin;
             model.NotifyMessege += HandldeOtherMovement;
-
             CreateMaze(model.MessageData);
         }
 
@@ -78,56 +70,13 @@ namespace WpfApp.Multi
             //todo verify that we got a move and not error
             //todo parse and display move
             //todo check if other win
-            
-        }
-
-        public void Movement(Key k)
-        {
-            
-
-            string s;
-            switch (k)
-            {
-                case Key.Up:
-                    s = "up";
-                    break;
-                case Key.Down:
-                    s = "down";
-                    break;
-                case Key.Left:
-                    s = "left";
-                    break;
-                case Key.Right:
-                    s = "right";
-                    break;
-                default:
-                    s = "ignore";
-                    break;
-            }
-            if (!s.Equals("ignore"))
-            {
-                model.HandleMyMovement(s);
-                //todo display my move!!
-                //todo check if i win
-            }
         }
 
         #region back to menu
 
         public void BackToMenu()
         {
-            ConfirmWindow confirm = new ConfirmWindow();
-            confirm.NotifCancel += HandleCancel;
-            confirm.NotifOk += HandleBack;
-        }
-
-        private void HandleBack()
-        {
-            NotifyFinish?.Invoke();
-        }
-
-        private void HandleCancel()
-        {
+            model.BackToMenu();
         }
 
         #endregion

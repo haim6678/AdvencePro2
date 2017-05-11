@@ -21,36 +21,22 @@ namespace WpfApp.Multi
     {
         private PreMultiViewModel ViewModel { get; set; }
 
-        public delegate void Notify(string s);
 
-        public event Notify NotifyStart;
-
-
-        public PreMultiWindow(Communicator com)
+        public PreMultiWindow(PreMultiViewModel vm)
         {
             InitializeComponent();
-            this.ViewModel = new PreMultiViewModel(com);
-
+            this.ViewModel = vm;
             this.DataContext = ViewModel;
         }
 
         private void Join_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.NotifyStart += StartMethod;
             ViewModel.JoinClick();
         }
 
         private void Start_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.NotifyStart += StartMethod;
             ViewModel.Start();
-        }
-
-
-        private void StartMethod(string s)
-        {
-            this.Close();
-            NotifyStart?.Invoke(s);
         }
     }
 }

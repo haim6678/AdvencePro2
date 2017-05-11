@@ -29,6 +29,11 @@ namespace WpfApp
         {
         }
 
+        public void Finish(string s)
+        {
+            HandleFinish?.Invoke();
+        }
+
         #region communication
 
         private void Communicate(string s)
@@ -61,13 +66,6 @@ namespace WpfApp
         }
 
         #endregion
-
-
-        public void Finish(string s)
-        {
-            FinishMassage = s;
-            HandleFinish?.Invoke();
-        }
 
         #region properties
 

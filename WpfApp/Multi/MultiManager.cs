@@ -14,29 +14,60 @@ namespace WpfApp.Multi
 
         public event Notify NotifyFinish;
 
+        private PreMultiModel preModel;
+        private PreMultiViewModel preVM;
+        private PreMultiWindow preView;
+        private MultiView multi;
+        private MultiModel multiModel;
+        private MultiViewModel multiVM;
+
         public MultiManager(string port, string ip)
         {
             com = new Communicator(port, ip);
+            preModel = new PreMultiModel(com);
+            preModel.NotifyStart += StartNewMulti;
+            preVM = new PreMultiViewModel(preModel);
+            preView = new PreMultiWindow(preVM);
         }
 
         public void Start()
         {
-            PreMultiWindow window = new PreMultiWindow(com);
-            window.NotifyStart += StartNewMulti;
-            window.Show();
+            preView.ShowDialog();
         }
 
         private void StartNewMulti(string s)
         {
-            MultiView multi = new MultiView(com, s);
-            multi.NotifyFinish += FinishGame; //todo close communicator
-            multi.Show();
+            switch (s)
+            {
+                case "join":
+                    s = s + " " + preModel.Name;
+                    break;
+                case "start":
+                    s = s + " " + preModel.Name + " " + preModel.Width + " " + preModel.Height;
+                    //todo width then height or the other way?
+                    break;
+                default:
+                    s = null;
+                    break;
+            }
+
+            if (s != null)
+            {
+                multiModel = new MultiModel(com, s);
+                multiModel.NotifyFinish += FinishGame;
+                multiVM = new MultiViewModel(multiModel);
+                MultiView multi = new MultiView(multiVM);
+
+                multi.Show();
+            }
         }
 
         private void FinishGame()
         {
             com.StopListenning();
-            NotifyFinish?.Invoke();
+            //todo display window with detailes on who closed the game 
+            //todo the info is in the finish message in the model
+            multi.Close();
         }
     }
 }
