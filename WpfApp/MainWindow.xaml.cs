@@ -80,7 +80,6 @@ namespace WpfApp
         {
             MultiManager manager = new MultiManager(port, ip);
             manager.Start();
-            manager.NotifyFinish += ; //todo todo like this for single player
         }
     }
 

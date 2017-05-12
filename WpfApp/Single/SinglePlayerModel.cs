@@ -24,7 +24,7 @@ namespace WpfApp
         public event GameEnded HandleFinish;
         public string FinishMassage;
 
-
+        
         public SinglePlayerModel()
         {
         }
@@ -53,16 +53,16 @@ namespace WpfApp
             client.Close();
         }
 
-        public void start(string name, string width, string height)
+        public void start()
         {
             Communicate(name + " " + width + " " + height);
         }
 
 
-        public void Solve(string s)
+        public void Solve()
         {
             string str = ConfigurationManager.AppSettings["SearchAlgo"];
-            Communicate("solve " + s + " " + str);
+            Communicate("solve " + name + " " + str);
         }
 
         #endregion
@@ -195,5 +195,10 @@ namespace WpfApp
         }
 
         #endregion
+
+        public void BackToMenu()
+        {
+            HandleFinish?.Invoke();
+        }
     }
 }

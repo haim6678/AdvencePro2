@@ -20,7 +20,7 @@ namespace WpfApp
 
         private Position p { get; set; }
         private Maze m { get; set; }
-
+        private ConfirmWindow confirm;
 
         public SinglePlayerViewModel(SinglePlayerModel mod)
         {
@@ -41,7 +41,17 @@ namespace WpfApp
             set { model.Name = value; }
         }
 
-        
+        public string VM_Maze
+        {
+            get { return model.Maze.ToString(); }
+            set { model.Maze = Maze.FromJSON(value); } //todo like this?
+        }
+
+        public string VM_Position
+        {
+            get { return model.Position.ToString(); }
+            set { }
+        }
 
         public string VM_Width
         {
@@ -60,18 +70,12 @@ namespace WpfApp
 
         #region start
 
-        public void StartSingle(string name, string widt, string heigh)
-        {
-            model.Message += CreateMaze;
-            model.start(name, widt, heigh);
-        }
-
         private void CreateMaze()
         {
             //todo handle creation with data binding
-            model.Message -= CreateMaze;
+            //model.Message -= CreateMaze;
             SharedData.Message msg;
-            msg = SharedData.Message.FromJSON(model.MassageData);
+            // msg = SharedData.Message.FromJSON(model.MassageData);
         }
 
         #endregion
@@ -94,8 +98,8 @@ namespace WpfApp
 
         public void Solve()
         {
-            model.Message += ReceivedSolveMaze;
-            model.Solve(Name);
+            //model.Message += ReceivedSolveMaze;
+            model.Solve();
         }
 
         private void ReceivedSolveMaze()
@@ -103,7 +107,7 @@ namespace WpfApp
             //todo handle display of solved maze
             //convert back to maze initialize maze and position     //todo <-
             //handle the gui creation  //todo <-
-            model.Message -= ReceivedSolveMaze;
+            //model.Message -= ReceivedSolveMaze;
         }
 
         #endregion
@@ -126,6 +130,7 @@ namespace WpfApp
 
         private void HandleCancel()
         {
+            confirm.Close();
         }
 
         #endregion
@@ -148,7 +153,7 @@ namespace WpfApp
         {
             //todo display "you quit"
 
-            NotifFinish?.Invoke();
+            model.BackToMenu();
         }
 
         #endregion

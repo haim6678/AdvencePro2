@@ -41,6 +41,7 @@ namespace WpfApp.Single
             model.HandleFinish += Finish;
             SingleVM = new SinglePlayerViewModel(model);
             SingleView = new SinglePlayerView(SingleVM);
+            model.start();
             SingleView.Show();
         }
 

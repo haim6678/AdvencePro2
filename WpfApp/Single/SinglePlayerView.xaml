@@ -4,11 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp.Single"
+        xmlns:control="clr-namespace:WpfApp.Other"
         mc:Ignorable="d"
         Title="SinglePlayerView" Height="300" Width="300" KeyUp="SinglePlayerView_OnKeyUp">
     <Grid>
-        <Button Name="Solve" Click="Solve_OnClick"></Button>
-        <Button Name="Resatrt" Click="Resatrt_OnClick"></Button>
-        <Button Name="menu" Click="Menu_OnClick"></Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+            <Button x:Name="Solve" Content="Solve" Click="Solve_OnClick"  Margin="30,0,50,0" Width="49" Height="10" FontSize="6" />
+            <Button x:Name="Resatrt" Content="Restart" Click="Resatrt_OnClick"  Margin="0,0,40,0" Width="49" Height="10" FontSize="6" />
+            <Button x:Name="Menu" Click="Menu_OnClick" Content="Menu"  Margin="0,0,80,0" Width="49" Height="10" FontSize="6" />
+        </StackPanel>
+        <control:MazeDraw Grid.Row="1" x:Name="MazeDraw" Maze="{Binding Path=VM_Maze}"   >
+       
+        </control:MazeDraw>
+
     </Grid>
 </Window>
