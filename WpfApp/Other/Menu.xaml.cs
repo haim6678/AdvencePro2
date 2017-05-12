@@ -26,11 +26,10 @@ namespace WpfApp
         public event userClick singleClick;
         public event userClick multiClick;
 
-        public bool inGame;
+
         public Menu(MainWindow window)
         {
             InitializeComponent();
-            inGame = false;
             window.IsEnabled = true;
             this.Focus();
             this.DataContext = window;
@@ -49,10 +48,7 @@ namespace WpfApp
 
         private void Single_OnClick(object sender, RoutedEventArgs e)
         {
-            if (!inGame) //todo need check?
-            {
-                singleClick?.Invoke();
-            }
+            singleClick?.Invoke();
         }
     }
 }

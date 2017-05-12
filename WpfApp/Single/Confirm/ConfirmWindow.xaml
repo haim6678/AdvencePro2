@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:WpfApp.Single.Confirm"
         mc:Ignorable="d"
         Title="ConfirmWindow" Height="600" Width="800">
-    <Grid>
-        <Button Name="Ok" Click="Ok_OnClick"></Button>
-        <Button Name="Cancel" Click="Cancel_OnClick"></Button>
-    </Grid>
+    <StackPanel>
+        <Button Name="Ok" Content="Ok" Click="Ok_OnClick" Height="48" Margin="330,10,365.6,0"></Button>
+        <Button x:Name="Cancel"  Content="Cancel" Click="Cancel_OnClick" Margin="330,6,365.6,0" Height="48"/>
+    </StackPanel>
 </Window>
+

@@ -17,9 +17,6 @@ namespace WpfApp
 
         private SinglePlayerModel model;
 
-
-        private Position p { get; set; }
-        private Maze m { get; set; }
         private ConfirmWindow confirm;
 
         public SinglePlayerViewModel(SinglePlayerModel mod)
@@ -50,7 +47,11 @@ namespace WpfApp
         public string VM_Position
         {
             get { return model.Position.ToString(); }
-            set { }
+            set
+            {
+                Position pos = new Position(int.Parse(value.Split(',')[0]), int.Parse(value.Split(',')[1]));
+                model.Position = pos;
+            }
         }
 
         public string VM_Width
@@ -124,8 +125,7 @@ namespace WpfApp
 
         private void HandleRestart()
         {
-            p = m.InitialPos;
-            //todo display new location
+            model.Restart();
         }
 
         private void HandleCancel()
@@ -144,9 +144,10 @@ namespace WpfApp
 
         public void BackToMenuCheck()
         {
-            ConfirmWindow confirm = new ConfirmWindow();
+            confirm = new ConfirmWindow();
             confirm.NotifCancel += HandleCancel;
             confirm.NotifOk += HandleBack;
+            confirm.ShowDialog();
         }
 
         private void HandleBack()

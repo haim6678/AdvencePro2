@@ -12,6 +12,7 @@ using System.Windows.Input;
 using MazeLib;
 using WpfApp.Single.Confirm;
 using System.Windows;
+using SharedData;
 
 namespace WpfApp
 {
@@ -19,12 +20,14 @@ namespace WpfApp
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public delegate void GameEnded();
+        public delegate void Notify();
 
-        public event GameEnded HandleFinish;
+        public event Notify HandleFinish;
+        public event Notify HandleMassage;
         public string FinishMassage;
+        private string ServerMassage;
 
-        
+
         public SinglePlayerModel()
         {
         }
@@ -40,7 +43,7 @@ namespace WpfApp
         {
             string portNumber = ConfigurationManager.AppSettings["PortNum"];
             string ipNumber = ConfigurationManager.AppSettings["ip"];
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(portNumber), int.Parse(ipNumber));
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ipNumber), int.Parse(portNumber));
             TcpClient client = new TcpClient();
             client.Connect(ep);
             NetworkStream stream = client.GetStream();
@@ -48,16 +51,38 @@ namespace WpfApp
             BinaryWriter writer = new BinaryWriter(stream);
 
             writer.Write(s);
-            s = reader.ReadString();
-            //todo check how to handle data
+            ServerMassage = reader.ReadString();
             client.Close();
+            HandleMassage?.Invoke();
         }
 
         public void start()
         {
-            Communicate(name + " " + width + " " + height);
+            HandleMassage += StartMaesaage;
+            Communicate("generate " + name + " " + width + " " + height);
         }
 
+        private void StartMaesaage()
+        {
+            HandleMassage += StartMaesaage;
+            SharedData.Message msg = SharedData.Message.FromJSON(ServerMassage);
+
+            CommandResult result = CommandResult.FromJSON(msg.Data);
+            if (result.Success)
+            {
+                Maze = Maze.FromJSON(result.Data);
+                this.Position = m.InitialPos;
+            }
+            else
+            {
+                //todo handle com failed
+            }
+        }
+
+        public void Restart()
+        {
+            Position = Maze.InitialPos;
+        }
 
         public void Solve()
         {
@@ -124,7 +149,7 @@ namespace WpfApp
                 if (!this.p.Equals(value))
                 {
                     this.p = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("")); //todo check
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Position")); //todo check
                 }
             }
         }
@@ -136,11 +161,9 @@ namespace WpfApp
             get { return m; }
             set
             {
-                if (!m.Equals(value))
-                {
-                    this.m = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("")); //todo check
-                }
+                this.m = value;
+                
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("")); //todo check
             }
         }
 
