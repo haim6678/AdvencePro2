@@ -39,9 +39,10 @@ namespace WpfApp.Single
             model.Height = preModel.Height;
             model.Name = preModel.Name;
             model.HandleFinish += Finish;
-            SingleVM = new SinglePlayerViewModel(model);
-            SingleView = new SinglePlayerView(SingleVM);
             model.start();
+            SingleVM = new SinglePlayerViewModel(model);            
+            SingleView = new SinglePlayerView(SingleVM);
+          
             SingleView.Show();
         }
 

@@ -52,19 +52,21 @@ namespace WpfApp.Other
             blueBrush = new SolidColorBrush(Colors.Blue);
             pos = new Rectangle();
             GoalPos = new Rectangle();
+            InitializeComponent();
         }
 
         private void MazeDraw_OnLoaded(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
             rows = int.Parse(MazeHeight);
             cols = int.Parse(MazeWidth);
             GetSpecialPos();
-            RecWidth = this.Width / cols;
-            RecHeight = this.Height / rows; //todo fixed size,or relative like this?
+            this.MyCanvas.Height = rows;
+            this.MyCanvas.Width = cols;
+            RecWidth = this.MyCanvas.Width / cols;
+            RecHeight = this.MyCanvas.Height / rows; //todo fixed size,or relative like this?
             rectangles = new Rectangle[rows, cols];
 
-            for (int i = 0; i < rows; i++) //todo
+            for (int i = 0; i < rows; i++) 
             {
                 for (int j = 0; j < cols; j++)
                 {
@@ -72,7 +74,7 @@ namespace WpfApp.Other
                     rectangles[i, j].Width = RecWidth;
                     rectangles[i, j].Height = RecHeight;
 
-                    if (Maze[i * cols + j].Equals("0")) //todo will work?
+                    if (Maze[i * cols + j].Equals('0')) 
                     {
                         rectangles[i, j].Fill = whitheBrush;
                     }
@@ -80,9 +82,9 @@ namespace WpfApp.Other
                     {
                         rectangles[i, j].Fill = blackBrush;
                     }
-                    MyCanvas.Children.Add(rectangles[i, j]);
-                    Canvas.SetTop(rectangles[i, j], j * 3);
-                    Canvas.SetLeft(rectangles[i, j], i * 3);
+                    this.MyCanvas.Children.Add(rectangles[i, j]);
+                    Canvas.SetTop(rectangles[i, j], i * RecHeight);
+                    Canvas.SetLeft(rectangles[i, j], j * RecWidth); //todo fix location according to size
                 }
             }
 
@@ -90,8 +92,8 @@ namespace WpfApp.Other
             pos.Width = RecWidth;
             pos.Height = RecHeight;
             MyCanvas.Children.Add(pos);
-            Canvas.SetTop(pos, InitialPosY); //todo y first as top???
-            Canvas.SetLeft(pos, InitialPosX);
+            Canvas.SetTop(pos, InitialPosX); //todo y first as top???
+            Canvas.SetLeft(pos, InitialPosY);
 
             GoalPos.Fill = ExitimageBrush;
             GoalPos.Width = RecWidth;
@@ -132,7 +134,7 @@ namespace WpfApp.Other
         }
 
         private static readonly DependencyProperty MazeWidthProperty =
-            DependencyProperty.Register("VM_Width", typeof(string),
+            DependencyProperty.Register("MazeWidth", typeof(string),
                 typeof(MazeDraw), null);
 
         public string MazeWidth
@@ -142,7 +144,7 @@ namespace WpfApp.Other
         }
 
         private static readonly DependencyProperty MazeHeightProperty =
-            DependencyProperty.Register("VM_Heigt", typeof(string),
+            DependencyProperty.Register("MazeHeight", typeof(string),
                 typeof(MazeDraw), null);
 
         public string MazeHeight
@@ -152,7 +154,7 @@ namespace WpfApp.Other
         }
 
         private static readonly DependencyProperty PositionProperty =
-            DependencyProperty.Register("VM_Position", typeof(string),
+            DependencyProperty.Register("PlayerPos", typeof(string),
                 typeof(MazeDraw), new UIPropertyMetadata(HandleNewPos));
 
         public string PlayerPos

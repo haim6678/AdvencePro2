@@ -71,13 +71,7 @@ namespace WpfApp
 
         #region start
 
-        private void CreateMaze()
-        {
-            //todo handle creation with data binding
-            //model.Message -= CreateMaze;
-            SharedData.Message msg;
-            // msg = SharedData.Message.FromJSON(model.MassageData);
-        }
+       
 
         #endregion
 

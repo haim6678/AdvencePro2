@@ -25,9 +25,10 @@ namespace WpfApp.Single
 
         public SinglePlayerView(SinglePlayerViewModel vm)
         {
-            InitializeComponent();
+            
             this.ViewModel = vm;
             this.DataContext = ViewModel;
+            InitializeComponent();
         }
 
 

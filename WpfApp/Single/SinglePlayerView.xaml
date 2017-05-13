@@ -9,17 +9,20 @@
         Title="SinglePlayerView" Height="300" Width="300" KeyUp="SinglePlayerView_OnKeyUp">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" >
-            <Button x:Name="Solve" Content="Solve" Click="Solve_OnClick"  Margin="30,0,50,0" Width="49" Height="10" FontSize="6" />
-            <Button x:Name="Resatrt" Content="Restart" Click="Resatrt_OnClick"  Margin="0,0,40,0" Width="49" Height="10" FontSize="6" />
-            <Button x:Name="Menu" Click="Menu_OnClick" Content="Menu"  Margin="0,0,80,0" Width="49" Height="10" FontSize="6" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button x:Name="Solve" Content="Solve" Click="Solve_OnClick" Margin="30,0,50,0" Width="49" Height="10"
+                    FontSize="6" />
+            <Button x:Name="Resatrt" Content="Restart" Click="Resatrt_OnClick" Margin="0,0,40,0" Width="49" Height="10"
+                    FontSize="6" />
+            <Button x:Name="Menu" Click="Menu_OnClick" Content="Menu" Margin="0,0,80,0" Width="49" Height="10"
+                    FontSize="6" />
         </StackPanel>
-        <control:MazeDraw Grid.Row="1" x:Name="MazeDraw" Maze="{Binding Path=VM_Maze}"   >
-       
-        </control:MazeDraw>
+        <control:MazeDraw Grid.Row="1" x:Name="MazeDraw" Maze="{Binding Path=VM_Maze}"
+                          PlayerPos="{Binding Path=VM_Position}"
+                          MazeWidth="{Binding Path=VM_Width}" MazeHeight="{Binding Path=VM_Height}" />
 
     </Grid>
 </Window>
