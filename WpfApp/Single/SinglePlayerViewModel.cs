@@ -100,7 +100,7 @@ namespace WpfApp
 
         public void Solve()
         {
-            //model.Message += ReceivedSolveMaze;
+            
             model.Solve();
         }
 
