@@ -43,7 +43,7 @@ namespace WpfApp.Single
             model.start();
             SingleVM = new SinglePlayerViewModel(model);            
             SingleView = new SinglePlayerView(SingleVM);
-          
+            SingleView.Finish += Finish;
             SingleView.Show();
         }
 
@@ -51,6 +51,7 @@ namespace WpfApp.Single
         {
             FinishWindowWiewModel vm = new FinishWindowWiewModel(model.FinishMassage);
             FinishWindow view = new FinishWindow();
+            //todo check why this window does not display string
             view.ShowDialog();
             SingleView.Close();
         }

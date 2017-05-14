@@ -79,16 +79,16 @@ namespace SharedData
 
             int size = sol.Count;
             StringBuilder sb = new StringBuilder();
-            ;
+            
             for (int i = 1; i < size; i++)
             {
                 next = sol[i].state;
 
-                if (next.Row == curr.Row + 1)
+                if (next.Row == curr.Row - 1)
                 {
                     sb.Append("2");
                 }
-                if (next.Row == curr.Row - 1)
+                if (next.Row == curr.Row + 1)
                 {
                     sb.Append("3");
                 }

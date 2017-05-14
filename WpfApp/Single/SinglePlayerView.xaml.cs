@@ -21,13 +21,14 @@ namespace WpfApp.Single
     {
         public delegate void NotifyFinish();
 
+        public event NotifyFinish Finish;
         public SinglePlayerViewModel ViewModel;
 
         public SinglePlayerView(SinglePlayerViewModel vm)
         {
-            
             this.ViewModel = vm;
             this.DataContext = ViewModel;
+            ViewModel.SolveEvent += c;
             InitializeComponent();
         }
 
@@ -56,6 +57,11 @@ namespace WpfApp.Single
         private void Menu_OnClick(object sender, RoutedEventArgs e)
         {
             ViewModel.BackToMenu();
+        }
+
+        private void c()
+        {
+            this.Dispatcher.Invoke(Finish);
         }
 
         #endregion

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MazeLib;
@@ -23,6 +24,7 @@ namespace WpfApp
         public delegate void Notify();
 
         public event Notify HandleFinish;
+        public event Notify FinishSolve;
         public event Notify HandleMassage;
         public string FinishMassage;
         private string ServerMassage;
@@ -30,11 +32,6 @@ namespace WpfApp
 
         public SinglePlayerModel()
         {
-        }
-
-        public void Finish(string s)
-        {
-            HandleFinish?.Invoke();
         }
 
         #region communication
@@ -56,15 +53,19 @@ namespace WpfApp
             HandleMassage?.Invoke();
         }
 
+        #endregion
+
+        #region StartGame
+
         public void start()
         {
-            HandleMassage += StartMaesaage;
+            HandleMassage += HandleStartMaesaage;
             Communicate("generate " + name + " " + width + " " + height);
         }
 
-        private void StartMaesaage()
+        private void HandleStartMaesaage()
         {
-            HandleMassage += StartMaesaage;
+            HandleMassage -= HandleStartMaesaage;
             SharedData.Message msg = SharedData.Message.FromJSON(ServerMassage);
 
             CommandResult result = CommandResult.FromJSON(msg.Data);
@@ -79,7 +80,7 @@ namespace WpfApp
             }
         }
 
-        public void SetStringMaze(string s)
+        private void SetStringMaze(string s)
         {
             Maze m = Maze.FromJSON(s);
             this.Maze = m;
@@ -109,6 +110,79 @@ namespace WpfApp
             mazeString = str;
         }
 
+        #endregion
+
+        #region Solve
+
+        public void Solve()
+        {
+            string str = ConfigurationManager.AppSettings["SearchAlgo"];
+            this.HandleMassage += HandleSolveMassage;
+            Communicate("solve " + name + " " + str);
+            //todo what string to represent when the user pressed solve?
+        }
+
+        private void AnimateSolution(string s)
+        {
+            string str = s;
+            string[] arr = str.Split(',');
+            str = arr[2];
+            arr = str.Split(':');
+            str = arr[1];
+
+            str.Replace("\r", "");
+            str.Replace("\n", "");
+
+            Console.WriteLine(str);
+            for (int i = 0; i < str.Length; i++)
+            {
+                switch (str[i])
+                {
+                    //go left
+                    case '0':
+                        this.Position = new Position(this.position.Row, this.position.Col - 1);
+                        break;
+                    //go right
+                    case '1':
+                        this.Position = new Position(this.position.Row, this.position.Col + 1);
+                        break;
+                    //go up
+                    case '2':
+                        this.Position = new Position(this.position.Row - 1, this.position.Col);
+                        break;
+                    //go down          
+                    case '3':
+                        this.Position = new Position(this.position.Row + 1, this.position.Col);
+                        break;
+
+                    default:
+                        break;
+                }
+                System.Threading.Thread.Sleep(500);
+            }
+            FinishMassage = "YOU USED SOLVE COMMAND"; //TODO what to do
+            FinishSolve?.Invoke();
+        }
+
+        private void HandleSolveMassage()
+        {
+            HandleMassage -= HandleSolveMassage;
+            SharedData.Message message = Message.FromJSON(ServerMassage);
+            CommandResult commandResult = CommandResult.FromJSON(message.Data);
+            if (!commandResult.Success)
+            {
+                //todo handle fail
+            }
+            Thread t2 = new Thread(delegate() { AnimateSolution(commandResult.Data); });
+            t2.SetApartmentState(ApartmentState.STA);
+
+            t2.Start();
+        }
+
+        #endregion
+
+        #region properties
+
         private string mazeString;
 
         public string MazeString
@@ -123,21 +197,6 @@ namespace WpfApp
                 }
             }
         }
-
-        public void Restart()
-        {
-            Position = Maze.InitialPos;
-        }
-
-        public void Solve()
-        {
-            string str = ConfigurationManager.AppSettings["SearchAlgo"];
-            Communicate("solve " + name + " " + str);
-        }
-
-        #endregion
-
-        #region properties
 
         private string name;
 
@@ -273,7 +332,21 @@ namespace WpfApp
 
         #endregion
 
+        #region finish
+
         public void BackToMenu()
+        {
+            HandleFinish?.Invoke();
+        }
+
+        #endregion
+
+        public void Restart()
+        {
+            Position = Maze.InitialPos;
+        }
+
+        public void Finish(string s)
         {
             HandleFinish?.Invoke();
         }

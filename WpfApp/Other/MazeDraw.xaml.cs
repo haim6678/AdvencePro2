@@ -22,6 +22,8 @@ namespace WpfApp.Other
     /// </summary>
     public partial class MazeDraw : UserControl
     {
+        #region members
+
         private Rectangle[,] rectangles;
         private ImageBrush PlayerimageBrush;
         private ImageBrush ExitimageBrush;
@@ -39,6 +41,8 @@ namespace WpfApp.Other
         private int ExitPosX { get; set; }
         private int rows { get; set; }
         private int cols { get; set; }
+
+        #endregion
 
         public MazeDraw()
         {
@@ -108,24 +112,6 @@ namespace WpfApp.Other
             Canvas.SetLeft(GoalPos, ExitPosY);
         }
 
-        private void GetSpecialPos()
-        {
-            int size = rows * cols;
-            for (int i = 0; i < size; i++)
-            {
-                if (Maze[i].Equals('#')) //todo exit it's *??
-                {
-                    ExitPosX = i / rows;
-                    ExitPosY = i % rows;
-                }
-                if (Maze[i].Equals('*'))
-                {
-                    InitialPosX = i / rows;
-                    InitialPosY = i % rows;
-                }
-            }
-        }
-
         #region Properties
 
         private static readonly DependencyProperty MazeProperty =
@@ -170,6 +156,26 @@ namespace WpfApp.Other
 
         #endregion
 
+        #region Positions
+
+        private void GetSpecialPos()
+        {
+            int size = rows * cols;
+            for (int i = 0; i < size; i++)
+            {
+                if (Maze[i].Equals('#')) //todo exit it's *??
+                {
+                    ExitPosX = i / rows;
+                    ExitPosY = i % rows;
+                }
+                if (Maze[i].Equals('*'))
+                {
+                    InitialPosX = i / rows;
+                    InitialPosY = i % rows;
+                }
+            }
+        }
+
         private static void HandleNewPos(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             string s = e.NewValue.ToString(); //todo check if work
@@ -181,5 +187,7 @@ namespace WpfApp.Other
             Canvas.SetTop(pos, newX); //todo y first as top???
             Canvas.SetLeft(pos, newY);
         }
+
+        #endregion
     }
 }

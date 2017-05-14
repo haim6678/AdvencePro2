@@ -15,6 +15,9 @@ namespace WpfApp
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public delegate void FinishSolve();
+
+        public event FinishSolve SolveEvent ;
         private SinglePlayerModel model;
 
         private ConfirmWindow confirm;
@@ -23,8 +26,13 @@ namespace WpfApp
         {
             model = mod;
             model.PropertyChanged += Model_PropertyChanged;
+            model.FinishSolve += FinishSolveVM;
         }
 
+        private void FinishSolveVM()
+        {
+            SolveEvent?.Invoke();
+        }
         private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VM_" + e.PropertyName));
@@ -40,11 +48,7 @@ namespace WpfApp
 
         public string VM_Maze
         {
-            get
-            {
-                
-                return model.MazeString;
-            }
+            get { return model.MazeString; }
             set { model.Maze = Maze.FromJSON(value); } //todo like this?
         }
 
@@ -100,16 +104,7 @@ namespace WpfApp
 
         public void Solve()
         {
-            
             model.Solve();
-        }
-
-        private void ReceivedSolveMaze()
-        {
-            //todo handle display of solved maze
-            //convert back to maze initialize maze and position     //todo <-
-            //handle the gui creation  //todo <-
-            //model.Message -= ReceivedSolveMaze;
         }
 
         #endregion
