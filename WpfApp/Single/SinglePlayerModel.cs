@@ -70,12 +70,57 @@ namespace WpfApp
             CommandResult result = CommandResult.FromJSON(msg.Data);
             if (result.Success)
             {
-                Maze = Maze.FromJSON(result.Data);
-                this.Position = m.InitialPos;
+                SetStringMaze(result.Data);
+                this.position = maze.InitialPos;
             }
             else
             {
                 //todo handle com failed
+            }
+        }
+
+        public void SetStringMaze(string s)
+        {
+            Maze m = Maze.FromJSON(s);
+            this.Maze = m;
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < m.Rows; i++)
+            {
+                for (int j = 0; j < m.Cols; j++)
+                {
+                    if (m[i, j] == CellType.Free)
+                    {
+                        builder.Append("0");
+                    }
+                    else if ((m[i, j] == CellType.Wall))
+                    {
+                        builder.Append("1");
+                    }
+                }
+            }
+            Position p = m.InitialPos;
+            builder[p.Row * m.Cols + p.Col] = '*';
+            p = m.GoalPos;
+            builder[p.Row * m.Cols + p.Col] = '#';
+            Console.WriteLine(m);
+
+            string str = builder.ToString();
+            Console.WriteLine(str);
+            mazeString = str;
+        }
+
+        private string mazeString;
+
+        public string MazeString
+        {
+            get { return mazeString; }
+            set
+            {
+                if (!mazeString.Equals(value))
+                {
+                    this.mazeString = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MazeString"));
+                }
             }
         }
 
@@ -124,6 +169,7 @@ namespace WpfApp
             }
         }
 
+
         private string height;
 
         public string Height
@@ -139,31 +185,31 @@ namespace WpfApp
             }
         }
 
-        private Position p;
+        private Position position;
 
         public Position Position
         {
-            get { return p; }
+            get { return position; }
             set
             {
-                if (!this.p.Equals(value))
+                Position p = (Position) value;
+                if ((p.Row != position.Row) || (p.Col != position.Col))
                 {
-                    this.p = value;
+                    this.position = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Position")); //todo check
                 }
             }
         }
 
-        private Maze m;
+        private Maze maze;
 
         public Maze Maze
         {
-            get { return m; }
+            get { return maze; }
             set
             {
-                this.m = value;
-                
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("")); //todo check
+                this.maze = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Maze")); //todo check
             }
         }
 
@@ -173,10 +219,16 @@ namespace WpfApp
 
         public void HandleMovement(Key k)
         {
-            Position position = HandleMove(k);
-            if ((position.Col != -1) && (position.Row != -1))
+            Position pos = HandleMove(k);
+            if ((pos.Col != -1) && (position.Row != -1))
             {
-                p = position;
+                Position = pos;
+                if ((position.Col == maze.GoalPos.Col)
+                    && (position.Row == Maze.GoalPos.Row))
+                {
+                    FinishMassage = "YOU WON";
+                    HandleFinish?.Invoke();
+                }
             }
         }
 
@@ -186,28 +238,30 @@ namespace WpfApp
 
             switch (k)
             {
-                case Key.Up:
-                    if ((p.Row + 1 < m.Rows) && (m[p.Row + 1, p.Col] == CellType.Free))
+                case Key.Down:
+                    if ((position.Row + 1 < maze.Rows) &&
+                        (maze[position.Row + 1, position.Col] == CellType.Free))
                     {
-                        pos = new Position(p.Row + 1, p.Col);
+                        pos = new Position(position.Row + 1, position.Col);
                     }
                     break;
-                case Key.Down:
-                    if ((p.Row - 1 >= 0) && (m[p.Row - 1, p.Col] == CellType.Free))
+                case Key.Up:
+                    if ((position.Row - 1 >= 0) && (maze[position.Row - 1, position.Col] == CellType.Free))
                     {
-                        pos = new Position(p.Row - 1, p.Col);
+                        pos = new Position(position.Row - 1, position.Col);
                     }
                     break;
                 case Key.Left:
-                    if ((p.Col - 1 >= 0) && (m[p.Row, p.Col - 1] == CellType.Free))
+                    if ((position.Col - 1 >= 0) && (maze[position.Row, position.Col - 1] == CellType.Free))
                     {
-                        pos = new Position(p.Row, p.Col - 1);
+                        pos = new Position(position.Row, position.Col - 1);
                     }
                     break;
                 case Key.Right:
-                    if ((p.Col + 1 < m.Cols) && (m[p.Row, p.Col + 1] == CellType.Free))
+                    if ((position.Col + 1 < maze.Cols) &&
+                        (maze[position.Row, position.Col + 1] == CellType.Free))
                     {
-                        pos = new Position(p.Row, p.Col + 1);
+                        pos = new Position(position.Row, position.Col + 1);
                     }
                     break;
                 default:

@@ -46,7 +46,7 @@ namespace WpfApp.Other
                 new Uri(@"pack://application:,,,/WpfApp;component/Images/snoop-dogg.jpg")));
 
             ExitimageBrush = new ImageBrush(new BitmapImage(
-                new Uri(@"pack://application:,,,/WpfApp;component/Images/snoop-dogg.jpg")));
+                new Uri(@"pack://application:,,,/WpfApp;component/Images/images.jpg")));
             blackBrush = new SolidColorBrush(Colors.Black);
             whitheBrush = new SolidColorBrush(Colors.White);
             blueBrush = new SolidColorBrush(Colors.Blue);
@@ -66,23 +66,28 @@ namespace WpfApp.Other
             RecHeight = this.MyCanvas.Height / rows; //todo fixed size,or relative like this?
             rectangles = new Rectangle[rows, cols];
 
-            for (int i = 0; i < rows; i++) 
+            for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
                     rectangles[i, j] = new Rectangle();
                     rectangles[i, j].Width = RecWidth;
                     rectangles[i, j].Height = RecHeight;
-
-                    if (Maze[i * cols + j].Equals('0')) 
+                    string color;
+                    if (Maze[i * cols + j].Equals('1'))
                     {
-                        rectangles[i, j].Fill = whitheBrush;
+                        rectangles[i, j].Fill = blackBrush;
+                        color = "black";
                     }
                     else
                     {
-                        rectangles[i, j].Fill = blackBrush;
+                        rectangles[i, j].Fill = whitheBrush;
+                        color = "white";
                     }
                     this.MyCanvas.Children.Add(rectangles[i, j]);
+                    double x = i * RecHeight;
+                    double y = j * RecWidth;
+                    Console.WriteLine("{0},{1},{2}", x, y, color);
                     Canvas.SetTop(rectangles[i, j], i * RecHeight);
                     Canvas.SetLeft(rectangles[i, j], j * RecWidth); //todo fix location according to size
                 }
@@ -99,8 +104,8 @@ namespace WpfApp.Other
             GoalPos.Width = RecWidth;
             GoalPos.Height = RecHeight;
             MyCanvas.Children.Add(GoalPos);
-            Canvas.SetTop(GoalPos, ExitPosY); //todo y first as top???
-            Canvas.SetLeft(GoalPos, ExitPosX);
+            Canvas.SetTop(GoalPos, ExitPosX); //todo y first as top???
+            Canvas.SetLeft(GoalPos, ExitPosY);
         }
 
         private void GetSpecialPos()
@@ -108,12 +113,12 @@ namespace WpfApp.Other
             int size = rows * cols;
             for (int i = 0; i < size; i++)
             {
-                if (Maze[i].Equals('*')) //todo exit it's *??
+                if (Maze[i].Equals('#')) //todo exit it's *??
                 {
                     ExitPosX = i / rows;
                     ExitPosY = i % rows;
                 }
-                if (Maze[i].Equals('#'))
+                if (Maze[i].Equals('*'))
                 {
                     InitialPosX = i / rows;
                     InitialPosY = i % rows;
@@ -171,10 +176,10 @@ namespace WpfApp.Other
             MazeDraw m = d as MazeDraw;
 
             string[] arr = s.Split(',');
-            int newX = (arr[0])[1];
-            int newY = (arr[1])[0];
-            Canvas.SetTop(pos, newY); //todo y first as top???
-            Canvas.SetLeft(pos, newX);
+            int newX = (int) char.GetNumericValue((arr[0])[1]);
+            int newY = (int) char.GetNumericValue((arr[1])[0]);
+            Canvas.SetTop(pos, newX); //todo y first as top???
+            Canvas.SetLeft(pos, newY);
         }
     }
 }

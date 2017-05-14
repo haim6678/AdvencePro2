@@ -40,7 +40,11 @@ namespace WpfApp
 
         public string VM_Maze
         {
-            get { return model.Maze.ToString(); }
+            get
+            {
+                
+                return model.MazeString;
+            }
             set { model.Maze = Maze.FromJSON(value); } //todo like this?
         }
 
@@ -60,6 +64,11 @@ namespace WpfApp
             set { model.Width = value; }
         }
 
+        public string VM_MazeString
+        {
+            get { return model.MazeString; }
+            set { model.MazeString = value; }
+        }
 
         public string VM_Height
         {
@@ -70,8 +79,6 @@ namespace WpfApp
         #endregion
 
         #region start
-
-       
 
         #endregion
 

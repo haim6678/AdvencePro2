@@ -88,6 +88,10 @@
     </Compile>
     <Compile Include="Multi\Waitnig\WaitViewModel.cs" />
     <Compile Include="Multi\Waitnig\WatinModel.cs" />
+    <Compile Include="Other\FinishWindow.xaml.cs">
+      <DependentUpon>FinishWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Other\FinishWindowWiewModel.cs" />
     <Compile Include="Other\MazeDraw.xaml.cs">
       <DependentUpon>MazeDraw.xaml</DependentUpon>
     </Compile>
@@ -178,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Other\FinishWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Other\MazeDraw.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -208,6 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\snoop-dogg.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\weed.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using WpfApp.Other;
 using WpfApp.Single.PreGame;
 
 namespace WpfApp.Single
@@ -48,6 +49,9 @@ namespace WpfApp.Single
 
         private void Finish()
         {
+            FinishWindowWiewModel vm = new FinishWindowWiewModel(model.FinishMassage);
+            FinishWindow view = new FinishWindow();
+            view.ShowDialog();
             SingleView.Close();
         }
     }
