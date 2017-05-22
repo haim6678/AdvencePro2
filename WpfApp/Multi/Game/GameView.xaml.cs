@@ -12,21 +12,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WpfApp.Other
+namespace WpfApp.Multi.Game
 {
     /// <summary>
-    /// Interaction logic for FinishWindow.xaml
+    /// Interaction logic for GameView.xaml
     /// </summary>
-    public partial class FinishWindow : Window
+    public partial class GameView : Window
     {
-        public FinishWindow()
+        private GameVM vm;
+
+        public GameView(GameVM vm)
         {
             InitializeComponent();
-        }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.Close();
+            this.vm = vm;
+            this.DataContext = vm;
         }
     }
 }

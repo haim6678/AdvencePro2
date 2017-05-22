@@ -20,9 +20,8 @@
             <Button x:Name="Menu" Click="Menu_OnClick" Content="Menu" Margin="0,0,80,0" Width="49" Height="10"
                     FontSize="6" />
         </StackPanel>
-        <control:MazeDraw Grid.Row="1" x:Name="MazeDraw" Maze="{Binding Path=VM_MazeString}"
-                          PlayerPos="{Binding Path=VM_Position}"
-                          MazeWidth="{Binding Path=VM_Width}" MazeHeight="{Binding Path=VM_Height}" />
-
+        <control:MazeDraw Grid.Row="1" x:Name="MazeDraw"
+                          Maze="{Binding Path=VM_Maze}"
+                          PlayerPos="{Binding Path=VM_Position}" />
     </Grid>
 </Window>

@@ -46,7 +46,7 @@ namespace Server.Controller.Commands
             try
             {
                 _model.Play(request);
-                return new CommandResult(true, Command.Play, "You moved " + dir.ToString(), true);
+                return new CommandResult(true, Command.Play, dir.ToString(), true);
             }
             catch (Exception e)
             {

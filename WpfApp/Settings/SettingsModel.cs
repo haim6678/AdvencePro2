@@ -15,11 +15,11 @@ namespace WpfApp.Settings
         public SettingsModel()
         {
             // initialize default fields by the app settings data.
-            this.IP = SettingsManager.Instance.ReadSetting(Settings.IP);
-            this.Port = ushort.Parse(SettingsManager.Instance.ReadSetting(Settings.Port));
-            this.MazeWidth = uint.Parse(SettingsManager.Instance.ReadSetting(Settings.Width));
-            this.MazeHeight = uint.Parse(SettingsManager.Instance.ReadSetting(Settings.Height));
-            this.SearchAlgorithm = byte.Parse(SettingsManager.Instance.ReadSetting(Settings.SearchAlgorithm));
+            this.IP = SettingsManager.Instance.ReadSetting(SettingName.IP);
+            this.Port = ushort.Parse(SettingsManager.Instance.ReadSetting(SettingName.Port));
+            this.MazeWidth = uint.Parse(SettingsManager.Instance.ReadSetting(SettingName.Width));
+            this.MazeHeight = uint.Parse(SettingsManager.Instance.ReadSetting(SettingName.Height));
+            this.SearchAlgorithm = byte.Parse(SettingsManager.Instance.ReadSetting(SettingName.SearchAlgorithm));
         }
 
         /// <summary>
@@ -115,11 +115,11 @@ namespace WpfApp.Settings
 
         public void SaveSettings()
         {
-            SettingsManager.Instance.UpdateSetting(Settings.IP, IP);
-            SettingsManager.Instance.UpdateSetting(Settings.Port, Port.ToString());
-            SettingsManager.Instance.UpdateSetting(Settings.Width, MazeWidth.ToString());
-            SettingsManager.Instance.UpdateSetting(Settings.Height, MazeHeight.ToString());
-            SettingsManager.Instance.UpdateSetting(Settings.SearchAlgorithm, SearchAlgorithm.ToString());
+            SettingsManager.Instance.UpdateSetting(SettingName.IP, IP);
+            SettingsManager.Instance.UpdateSetting(SettingName.Port, Port.ToString());
+            SettingsManager.Instance.UpdateSetting(SettingName.Width, MazeWidth.ToString());
+            SettingsManager.Instance.UpdateSetting(SettingName.Height, MazeHeight.ToString());
+            SettingsManager.Instance.UpdateSetting(SettingName.SearchAlgorithm, SearchAlgorithm.ToString());
         }
     }
 }

@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="CommandResult.cs" />
     <Compile Include="MazeSolution.cs" />
     <Compile Include="Message.cs" />

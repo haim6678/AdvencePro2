@@ -1,73 +1,96 @@
-﻿using System;
+﻿using SharedData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using WpfApp.Communication;
+using WpfApp.Multi.Game;
+using WpfApp.Multi.Menu;
 
 namespace WpfApp.Multi
 {
     class MultiManager
     {
-        private Communicator com { get; set; }
+        private string ip;
+        private int port;
+        // operation: open menu. get needed operation.
+        // then 
 
-        public delegate void Notify();
-
-        public event Notify NotifyFinish;
-
-        private PreMultiModel preModel;
-        private PreMultiViewModel preVM;
-        private PreMultiWindow preView;
-        private MultiView multi;
-        private MultiModel multiModel;
-        private MultiViewModel multiVM;
-
-        public MultiManager(string port, string ip)
+        public MultiManager(string ip, int port)
         {
-            com = new Communicator(port, ip);
-            preModel = new PreMultiModel(com);
-            preModel.NotifyStart += StartNewMulti;
-            preVM = new PreMultiViewModel(preModel);
-            preView = new PreMultiWindow(preVM);
+            this.ip = ip;
+            this.port = port;
         }
 
         public void Start()
         {
-            preView.ShowDialog();
-        }
+            string cmd = GetCommandFromMenu();
+            // if user did not start or join a game
+            if (cmd == null)
+                return;
 
-        private void StartNewMulti(string s)
-        {
-            switch (s)
+            MessageBox.Show("Command to send " + cmd);
+            return;
+
+            // then we have a command to send.
+            // create async communicator. send the command, get response for join or start.
+            // if unsuccessfull, prompt the user with a message, and return
+            // if successfull, unlink the event of asyncComm, send the communicator to
+            // the GameModel, and show it.
+
+            Communicator com = new Communicator(ip, port);
+            com.SendMessage(cmd);
+            cmd = com.ReadMessage();
+            Message m = Message.FromJSON(cmd);
+
+            if (m.MessageType != MessageType.CommandResult)
             {
-                case "join":
-                    s = s + " " + preModel.Name;
-                    break;
-                case "start":
-                    s = s + " " + preModel.Name + " " + preModel.Width + " " + preModel.Height;
-                    //todo width then height or the other way?
+                // received notification when not expecting it.
+                com.Dispose();
+                return;
+            }
+
+            CommandResult res = CommandResult.FromJSON(m.Data);
+            // filter unwanted commands
+            switch (res.Command)
+            {
+                case Command.Start:
+                case Command.Join:
                     break;
                 default:
-                    s = null;
-                    break;
+                    // received different response for some reason
+                    com.Dispose();
+                    return;
             }
 
-            if (s != null)
+            if (!res.Success)
             {
-                multiModel = new MultiModel(com, s);
-                multiModel.NotifyFinish += FinishGame;
-                multiVM = new MultiViewModel(multiModel);
-                MultiView multi = new MultiView(multiVM);
-
-                multi.Show();
+                // failde to start / join a game
+                com.Dispose();
+                MessageBox.Show(res.Data);
+                return;
             }
+
+            // successfully created a game. pass the handle to the GameModel and start.
+            GameModel gmod = new GameModel(com);
+            GameVM gvm = new GameVM(gmod);
+            GameView gv = new GameView(gvm);
+
+            gv.ShowDialog();
         }
 
-        private void FinishGame()
+        private string GetCommandFromMenu()
         {
-            com.StopListenning();
-            //todo display window with detailes on who closed the game 
-            //todo the info is in the finish message in the model
-            multi.Close();
+            // open multiplayer window
+            MultiMenuModel model = new MultiMenuModel(ip, port);
+            MultiMenuVM vm = new MultiMenuVM(model);
+            MultiMenu mnu = new MultiMenu(vm);
+
+            string cmd;
+            mnu.ShowDialog(out cmd);
+            return cmd;
         }
     }
 }

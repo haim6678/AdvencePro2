@@ -35,12 +35,6 @@ namespace WpfApp.Other
         private double RecHeight; //todo relative
         private static Rectangle pos { get; set; } //todo will work with static
         private Rectangle GoalPos { get; set; }
-        private int InitialPosX { get; set; }
-        private int InitialPosY { get; set; }
-        private int ExitPosY { get; set; }
-        private int ExitPosX { get; set; }
-        private int rows { get; set; }
-        private int cols { get; set; }
 
         #endregion
 
@@ -61,37 +55,31 @@ namespace WpfApp.Other
 
         private void MazeDraw_OnLoaded(object sender, RoutedEventArgs e)
         {
-            rows = int.Parse(MazeHeight);
-            cols = int.Parse(MazeWidth);
-            GetSpecialPos();
-            this.MyCanvas.Height = rows;
-            this.MyCanvas.Width = cols;
-            RecWidth = this.MyCanvas.Width / cols;
-            RecHeight = this.MyCanvas.Height / rows; //todo fixed size,or relative like this?
-            rectangles = new Rectangle[rows, cols];
+            this.MyCanvas.Height = Maze.Rows;
+            this.MyCanvas.Width = Maze.Cols;
+            RecWidth = this.MyCanvas.Width / Maze.Cols;
+            RecHeight = this.MyCanvas.Height / Maze.Rows; //todo fixed size,or relative like this?
+            rectangles = new Rectangle[Maze.Rows, Maze.Cols];
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < Maze.Rows; i++)
             {
-                for (int j = 0; j < cols; j++)
+                for (int j = 0; j < Maze.Cols; j++)
                 {
                     rectangles[i, j] = new Rectangle();
                     rectangles[i, j].Width = RecWidth;
                     rectangles[i, j].Height = RecHeight;
-                    string color;
-                    if (Maze[i * cols + j].Equals('1'))
+
+                    if (Maze[i, j] == CellType.Wall)
                     {
                         rectangles[i, j].Fill = blackBrush;
-                        color = "black";
                     }
                     else
                     {
                         rectangles[i, j].Fill = whitheBrush;
-                        color = "white";
                     }
                     this.MyCanvas.Children.Add(rectangles[i, j]);
                     double x = i * RecHeight;
                     double y = j * RecWidth;
-                    Console.WriteLine("{0},{1},{2}", x, y, color);
                     Canvas.SetTop(rectangles[i, j], i * RecHeight);
                     Canvas.SetLeft(rectangles[i, j], j * RecWidth); //todo fix location according to size
                 }
@@ -101,91 +89,53 @@ namespace WpfApp.Other
             pos.Width = RecWidth;
             pos.Height = RecHeight;
             MyCanvas.Children.Add(pos);
-            Canvas.SetTop(pos, InitialPosX); //todo y first as top???
-            Canvas.SetLeft(pos, InitialPosY);
+            Canvas.SetTop(pos, Maze.InitialPos.Row); //todo y first as top???
+            Canvas.SetLeft(pos, Maze.InitialPos.Col);
 
             GoalPos.Fill = ExitimageBrush;
             GoalPos.Width = RecWidth;
             GoalPos.Height = RecHeight;
             MyCanvas.Children.Add(GoalPos);
-            Canvas.SetTop(GoalPos, ExitPosX); //todo y first as top???
-            Canvas.SetLeft(GoalPos, ExitPosY);
+            Canvas.SetTop(GoalPos, Maze.GoalPos.Row); //todo y first as top???
+            Canvas.SetLeft(GoalPos, Maze.GoalPos.Col);
         }
 
         #region Properties
-
-        private static readonly DependencyProperty MazeProperty =
-            DependencyProperty.Register("Maze", typeof(string),
-                typeof(MazeDraw), null);
-
-        public string Maze
+        public Maze Maze
         {
-            get { return GetValue(MazeProperty) as string; }
+            get { return (Maze)GetValue(MazeProperty); }
             set { SetValue(MazeProperty, value); }
         }
 
-        private static readonly DependencyProperty MazeWidthProperty =
-            DependencyProperty.Register("MazeWidth", typeof(string),
-                typeof(MazeDraw), null);
+        // Using a DependencyProperty as the backing store for Maze.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MazeProperty =
+            DependencyProperty.Register("Maze", typeof(Maze), typeof(MazeDraw));
 
-        public string MazeWidth
+
+
+        public Position PlayerPos
         {
-            get { return GetValue(MazeWidthProperty) as string; }
-            set { SetValue(MazeWidthProperty, value); }
+            get { return (Position)GetValue(PlayerPosProperty); }
+            set { SetValue(PlayerPosProperty, value); }
         }
 
-        private static readonly DependencyProperty MazeHeightProperty =
-            DependencyProperty.Register("MazeHeight", typeof(string),
-                typeof(MazeDraw), null);
+        // Using a DependencyProperty as the backing store for PlayerPos.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PlayerPosProperty =
+            DependencyProperty.Register("PlayerPos", typeof(Position), typeof(MazeDraw), new UIPropertyMetadata(HandleNewPos));
 
-        public string MazeHeight
-        {
-            get { return GetValue(MazeHeightProperty) as string; }
-            set { SetValue(MazeHeightProperty, value); }
-        }
 
-        private static readonly DependencyProperty PositionProperty =
-            DependencyProperty.Register("PlayerPos", typeof(string),
-                typeof(MazeDraw), new UIPropertyMetadata(HandleNewPos));
-
-        public string PlayerPos
-        {
-            get { return GetValue(PositionProperty) as string; }
-            set { SetValue(PositionProperty, value); }
-        }
 
         #endregion
 
         #region Positions
 
-        private void GetSpecialPos()
-        {
-            int size = rows * cols;
-            for (int i = 0; i < size; i++)
-            {
-                if (Maze[i].Equals('#')) //todo exit it's *??
-                {
-                    ExitPosX = i / rows;
-                    ExitPosY = i % rows;
-                }
-                if (Maze[i].Equals('*'))
-                {
-                    InitialPosX = i / rows;
-                    InitialPosY = i % rows;
-                }
-            }
-        }
-
         private static void HandleNewPos(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            string s = e.NewValue.ToString(); //todo check if work
+            Position s = (Position)e.NewValue;
             MazeDraw m = d as MazeDraw;
 
-            string[] arr = s.Split(',');
-            int newX = (int) char.GetNumericValue((arr[0])[1]);
-            int newY = (int) char.GetNumericValue((arr[1])[0]);
-            Canvas.SetTop(pos, newX); //todo y first as top???
-            Canvas.SetLeft(pos, newY);
+            Canvas.SetTop(pos, s.Row);
+            Canvas.SetLeft(pos, s.Col);
         }
 
         #endregion

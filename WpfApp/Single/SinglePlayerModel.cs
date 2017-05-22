@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MazeLib;
-using WpfApp.Single.Confirm;
 using System.Windows;
 using SharedData;
 
@@ -21,104 +20,21 @@ namespace WpfApp
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public delegate void Notify();
+        public delegate void GameOverHandler(string message);
+        public event GameOverHandler GameOver;
 
-        public event Notify HandleFinish;
-        public event Notify FinishSolve;
-        public event Notify HandleMassage;
-        public string FinishMassage;
-        private string ServerMassage;
-
-
-        public SinglePlayerModel()
+        public SinglePlayerModel(Maze m)
         {
-        }
-
-        #region communication
-
-        private void Communicate(string s)
-        {
-            string portNumber = ConfigurationManager.AppSettings["PortNum"];
-            string ipNumber = ConfigurationManager.AppSettings["ip"];
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ipNumber), int.Parse(portNumber));
-            TcpClient client = new TcpClient();
-            client.Connect(ep);
-            NetworkStream stream = client.GetStream();
-            BinaryReader reader = new BinaryReader(stream);
-            BinaryWriter writer = new BinaryWriter(stream);
-
-            writer.Write(s);
-            ServerMassage = reader.ReadString();
-            client.Close();
-            HandleMassage?.Invoke();
-        }
-
-        #endregion
-
-        #region StartGame
-
-        public void start()
-        {
-            HandleMassage += HandleStartMaesaage;
-            Communicate("generate " + name + " " + width + " " + height);
-        }
-
-        private void HandleStartMaesaage()
-        {
-            HandleMassage -= HandleStartMaesaage;
-            SharedData.Message msg = SharedData.Message.FromJSON(ServerMassage);
-
-            CommandResult result = CommandResult.FromJSON(msg.Data);
-            if (result.Success)
-            {
-                SetStringMaze(result.Data);
-                this.position = maze.InitialPos;
-            }
-            else
-            {
-                //todo handle com failed
-            }
-        }
-
-        private void SetStringMaze(string s)
-        {
-            Maze m = Maze.FromJSON(s);
             this.Maze = m;
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < m.Rows; i++)
-            {
-                for (int j = 0; j < m.Cols; j++)
-                {
-                    if (m[i, j] == CellType.Free)
-                    {
-                        builder.Append("0");
-                    }
-                    else if ((m[i, j] == CellType.Wall))
-                    {
-                        builder.Append("1");
-                    }
-                }
-            }
-            Position p = m.InitialPos;
-            builder[p.Row * m.Cols + p.Col] = '*';
-            p = m.GoalPos;
-            builder[p.Row * m.Cols + p.Col] = '#';
-            Console.WriteLine(m);
-
-            string str = builder.ToString();
-            Console.WriteLine(str);
-            mazeString = str;
+            this.Position = this.Maze.InitialPos;
         }
-
-        #endregion
 
         #region Solve
 
         public void Solve()
         {
             string str = ConfigurationManager.AppSettings["SearchAlgo"];
-            this.HandleMassage += HandleSolveMassage;
-            Communicate("solve " + name + " " + str);
+            //Communicate("solve " + Maze.Name + " " + str);
             //todo what string to represent when the user pressed solve?
         }
 
@@ -154,98 +70,31 @@ namespace WpfApp
                     case '3':
                         this.Position = new Position(this.position.Row + 1, this.position.Col);
                         break;
-
                     default:
                         break;
                 }
                 System.Threading.Thread.Sleep(500);
             }
-            FinishMassage = "YOU USED SOLVE COMMAND"; //TODO what to do
-            FinishSolve?.Invoke();
-        }
 
-        private void HandleSolveMassage()
-        {
-            HandleMassage -= HandleSolveMassage;
-            SharedData.Message message = Message.FromJSON(ServerMassage);
-            CommandResult commandResult = CommandResult.FromJSON(message.Data);
-            if (!commandResult.Success)
-            {
-                //todo handle fail
-            }
-            Thread t2 = new Thread(delegate() { AnimateSolution(commandResult.Data); });
-            t2.SetApartmentState(ApartmentState.STA);
-
-            t2.Start();
+            GameOver?.Invoke("The maze has been solved :)");
         }
 
         #endregion
 
         #region properties
 
-        private string mazeString;
-
-        public string MazeString
+        private Maze maze;
+        public Maze Maze
         {
-            get { return mazeString; }
+            get { return maze; }
             set
             {
-                if (!mazeString.Equals(value))
-                {
-                    this.mazeString = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MazeString"));
-                }
-            }
-        }
-
-        private string name;
-
-        public string Name
-        {
-            get { return this.name; }
-            set
-            {
-                if (this.name != value)
-                {
-                    this.name = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
-                }
-            }
-        }
-
-        private string width;
-
-        public string Width
-        {
-            get { return this.width; }
-            set
-            {
-                if (this.width != value)
-                {
-                    this.width = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Width"));
-                }
-            }
-        }
-
-
-        private string height;
-
-        public string Height
-        {
-            get { return this.height; }
-            set
-            {
-                if (this.height != value)
-                {
-                    this.height = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Height"));
-                }
+                this.maze = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Maze")); //todo check
             }
         }
 
         private Position position;
-
         public Position Position
         {
             get { return position; }
@@ -260,34 +109,26 @@ namespace WpfApp
             }
         }
 
-        private Maze maze;
-
-        public Maze Maze
-        {
-            get { return maze; }
-            set
-            {
-                this.maze = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Maze")); //todo check
-            }
-        }
-
         #endregion
 
         #region moveLogic
 
-        public void HandleMovement(Key k)
+        public void HandleMovement(Direction d)
         {
-            Position pos = HandleMove(k);
-            if ((pos.Col != -1) && (position.Row != -1))
+            Position pos = GetEstimatedPosition(Position, d);
+            if (pos.Col < 0 || pos.Col >= Maze.Cols)
+                return;
+            if (pos.Row < 0 || pos.Row >= Maze.Rows)
+                return;
+            if (Maze[pos.Row, pos.Col] == CellType.Wall)
+                return;
+
+            Position = pos;
+            if (Position.Col == Maze.GoalPos.Col && Position.Row == Maze.GoalPos.Row)
             {
-                Position = pos;
-                if ((position.Col == maze.GoalPos.Col)
-                    && (position.Row == Maze.GoalPos.Row))
-                {
-                    FinishMassage = "YOU WON";
-                    HandleFinish?.Invoke();
-                }
+                // handle win
+                MessageBox.Show("Congratulations! You won!", "You Won!", MessageBoxButton.OK, MessageBoxImage.None);
+                
             }
         }
 
@@ -332,23 +173,29 @@ namespace WpfApp
 
         #endregion
 
-        #region finish
-
-        public void BackToMenu()
-        {
-            HandleFinish?.Invoke();
-        }
-
-        #endregion
-
         public void Restart()
         {
             Position = Maze.InitialPos;
         }
 
-        public void Finish(string s)
+        private static Position GetEstimatedPosition(Position p, Direction d)
         {
-            HandleFinish?.Invoke();
+            switch (d)
+            {
+                case Direction.Up:
+                    --p.Row;
+                    break;
+                case Direction.Down:
+                    ++p.Row;
+                    break;
+                case Direction.Left:
+                    --p.Col;
+                    break;
+                case Direction.Right:
+                    ++p.Col;
+                    break;
+            }
+            return p;
         }
     }
 }

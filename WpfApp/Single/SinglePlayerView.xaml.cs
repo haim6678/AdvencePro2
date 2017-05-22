@@ -20,15 +20,14 @@ namespace WpfApp.Single
     public partial class SinglePlayerView : Window
     {
         public delegate void NotifyFinish();
-
+        
         public event NotifyFinish Finish;
-        public SinglePlayerViewModel ViewModel;
+        public SinglePlayerVM vm;
 
-        public SinglePlayerView(SinglePlayerViewModel vm)
+        public SinglePlayerView(SinglePlayerVM vm)
         {
-            this.ViewModel = vm;
-            this.DataContext = ViewModel;
-            ViewModel.SolveEvent += c;
+            this.vm = vm;
+            this.DataContext = this.vm;
             InitializeComponent();
         }
 
@@ -37,7 +36,7 @@ namespace WpfApp.Single
         {
             if (e != null)
             {
-                ViewModel.HandleMovement(e.Key);
+                vm.HandleMovement(e.Key);
             }
         }
 
@@ -45,18 +44,17 @@ namespace WpfApp.Single
 
         private void Solve_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Solve();
+            vm.Solve();
         }
-
-
+        
         private void Resatrt_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Restart();
+            vm.Restart();
         }
 
         private void Menu_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.BackToMenu();
+            this.Close();
         }
 
         private void c()

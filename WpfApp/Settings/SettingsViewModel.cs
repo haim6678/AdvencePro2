@@ -20,16 +20,6 @@ namespace WpfApp.Settings
         {
             this.model = model;
             model.PropertyChanged += Model_PropertyChanged;
-            LoadInitialDataFromModel();
-        }
-
-        private void LoadInitialDataFromModel()
-        {
-            this.VM_IP = model.IP;
-            this.VM_Port = model.Port;
-            this.VM_MazeWidth = model.MazeWidth;
-            this.VM_MazeHeight = model.MazeWidth;
-            this.VM_SearchAlgorithm = model.SearchAlgorithm;
         }
 
         private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)

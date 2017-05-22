@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp.Settings
 {
-    public enum Settings
+    public enum SettingName
     {
         IP,
         Port,
@@ -20,7 +20,7 @@ namespace WpfApp.Settings
     {
         private static readonly SettingsManager _instance = new SettingsManager();
 
-        private Dictionary<Settings, string> settingNames;
+        private Dictionary<SettingName, string> settingNames;
 
         public static SettingsManager Instance
         {
@@ -32,20 +32,20 @@ namespace WpfApp.Settings
 
         private SettingsManager()
         {
-            settingNames = new Dictionary<Settings, string>();
-            settingNames.Add(Settings.IP, "Ip");
-            settingNames.Add(Settings.Port, "PortNum");
-            settingNames.Add(Settings.Width, "Width");
-            settingNames.Add(Settings.Height, "Height");
-            settingNames.Add(Settings.SearchAlgorithm, "SearchAlgo");
+            settingNames = new Dictionary<SettingName, string>();
+            settingNames.Add(SettingName.IP, "Ip");
+            settingNames.Add(SettingName.Port, "PortNum");
+            settingNames.Add(SettingName.Width, "Width");
+            settingNames.Add(SettingName.Height, "Height");
+            settingNames.Add(SettingName.SearchAlgorithm, "SearchAlgo");
         }
 
 
-        public string ReadSetting(Settings setting)
+        public string ReadSetting(SettingName setting)
         {
             return ConfigurationManager.AppSettings[settingNames[setting]];
         }
-        public void UpdateSetting(Settings setting, string value)
+        public void UpdateSetting(SettingName setting, string value)
         {
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             configuration.AppSettings.Settings[settingNames[setting]].Value = value;
