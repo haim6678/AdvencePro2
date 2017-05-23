@@ -11,6 +11,7 @@ namespace WpfApp.Single
 {
     class SingleManager
     {
+
         private PreSingleGameWindow pre { get; set; }
         private SinglePlayerView SingleView { get; set; }
         private PreViewModel preVM { get; set; }
