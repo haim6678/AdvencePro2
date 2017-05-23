@@ -6,8 +6,11 @@
         xmlns:local="clr-namespace:WpfApp.Multi.Menu"
         xmlns:customcontrols="clr-namespace:WpfApp.CustomControls"
         mc:Ignorable="d"
-        Title="MultiMenu" MinHeight="210" Height="210" MinWidth="285" Width="285">
-    <Grid Margin="12" Background="Bisque">
+        Title="MultiMenu"  Height="300" Width="300">
+    <Window.Background>
+        <ImageBrush ImageSource="../../Images/thumb-1920-763357.jpg"></ImageBrush>
+    </Window.Background>
+    <Grid Margin="15">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -26,7 +29,7 @@
                   IsSynchronizedWithCurrentItem="True"
                   Grid.Row="0" Grid.Column="1" Margin="0,2" MinWidth="100"/>
         <Button Name="refreshBtn" Content="Refresh" 
-                Grid.Row="0" Grid.Column="2" Width="Auto" Click="refreshBtn_Click" />
+                Grid.Row="0" Grid.Column="2" Width="Auto" Click="refreshBtn_Click" Background="Cyan" Margin="5,0,0,0"/>
         <Button Name="joinBtn" Content="Join" Click="joinBtn_Click"
                 Grid.Row="1" Grid.Column="1"
                 Background="Aquamarine" />
@@ -36,6 +39,6 @@
             Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
         
         <Button Name="startBtn" Content="Start"
-                Grid.Row="3" Grid.Column="1" Click="startBtn_Click" />
+                Grid.Row="3" Grid.Column="1" Click="startBtn_Click"  Background="Green"/>
     </Grid>
 </Window>

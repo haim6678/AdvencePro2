@@ -197,5 +197,32 @@
   <ItemGroup>
     <Folder Include="Single\Game\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\skyline-buildings-new-york-skyscrapers.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\road-sky-sand-street.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\volkswagen-auto-historically-vw-163809.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\pexels-photo-66407.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\sky-clouds-blue-horizon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\runner.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\gear-wallpaper-6-1024x576.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\thumb-350-587593.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\thumb-1920-763357.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

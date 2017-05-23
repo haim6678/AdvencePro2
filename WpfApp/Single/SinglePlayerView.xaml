@@ -7,19 +7,23 @@
         xmlns:control="clr-namespace:WpfApp.Other"
         mc:Ignorable="d"
         Title="SinglePlayerView" Width="500" Height="500" KeyUp="SinglePlayerView_OnKeyUp">
+    <Window.Background>
+        <ImageBrush ImageSource="../Images/road-sky-sand-street.jpg"></ImageBrush>
+    </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Center" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
-            <Button x:Name="Solve" Content="Solve" Click="Solve_OnClick"
+            <Button x:Name="Solve" Content="Solve" Width="70" Padding="5" Click="Solve_OnClick"
                     FontSize="10" Margin="5,0" />
-            <Button x:Name="Resatrt" Content="Restart" Click="Resatrt_OnClick"
+            <Button x:Name="Resatrt" Content="Restart" Width="70" Click="Resatrt_OnClick"
                     FontSize="10" Margin="5,0"/>
-            <Button x:Name="Menu" Click="Menu_OnClick" Content="Menu" Margin="5,0"
+            <Button x:Name="Menu" Click="Menu_OnClick" Width="70" Content="Menu" Margin="5,0"
                     FontSize="10" />
         </StackPanel>
+        
         <control:MazeDraw Grid.Row="1" x:Name="MazeDraw"
                           Maze="{Binding Path=VM_Maze}"
                           PlayerPos="{Binding Path=VM_Position}" />

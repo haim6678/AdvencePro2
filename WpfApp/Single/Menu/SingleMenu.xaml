@@ -7,7 +7,10 @@
         xmlns:customcontrols="clr-namespace:WpfApp.CustomControls"
         mc:Ignorable="d"
         Title="SingleMenu" Height="300" Width="300">
-    <Grid Background="Cyan">
+    <Window.Background>
+        <ImageBrush ImageSource="../../Images/sky-clouds-blue-horizon.jpg"></ImageBrush>
+    </Window.Background>
+    <Grid >
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
