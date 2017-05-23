@@ -1,0 +1,41 @@
+﻿<Window x:Class="WpfApp.Multi.Menu.MultiMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp.Multi.Menu"
+        xmlns:customcontrols="clr-namespace:WpfApp.CustomControls"
+        mc:Ignorable="d"
+        Title="MultiMenu" MinHeight="210" Height="210" MinWidth="285" Width="285">
+    <Grid Margin="12" Background="Bisque">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label Content="List Of Games" 
+               Grid.Row="0" Grid.Column="0" MinWidth="100"/>
+        <ComboBox Name="ListBox" ItemsSource="{Binding Path=VM_GameList}" SelectedItem="{Binding SimpleStringProperty}"
+                  IsSynchronizedWithCurrentItem="True"
+                  Grid.Row="0" Grid.Column="1" Margin="0,2" MinWidth="100"/>
+        <Button Name="refreshBtn" Content="Refresh" 
+                Grid.Row="0" Grid.Column="2" Width="Auto" Click="refreshBtn_Click" />
+        <Button Name="joinBtn" Content="Join" Click="joinBtn_Click"
+                Grid.Row="1" Grid.Column="1"
+                Background="Aquamarine" />
+        <customcontrols:MazeConf MazeName="{Binding Mode=TwoWay, Path=VM_MazeName}" 
+                                 MazeRows="{Binding Mode=TwoWay, Path=VM_MazeRows}" 
+                                 MazeColumns="{Binding Mode=TwoWay, Path=VM_MazeColumns}"
+            Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
+        
+        <Button Name="startBtn" Content="Start"
+                Grid.Row="3" Grid.Column="1" Click="startBtn_Click" />
+    </Grid>
+</Window>

@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvencePro2", "AdvencePro2\AdvencePro2.csproj", "{37D025DE-D6B0-4D1A-8538-7344CB1AC30A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{1862F420-CACA-487E-920D-AAB20487620B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAlgorithmsLib", "SearchAlgorithmsLib\SearchAlgorithmsLib.csproj", "{F7A2E52A-168C-470C-B303-D5C438BBAD71}"
@@ -27,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{37D025DE-D6B0-4D1A-8538-7344CB1AC30A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37D025DE-D6B0-4D1A-8538-7344CB1AC30A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37D025DE-D6B0-4D1A-8538-7344CB1AC30A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37D025DE-D6B0-4D1A-8538-7344CB1AC30A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1862F420-CACA-487E-920D-AAB20487620B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1862F420-CACA-487E-920D-AAB20487620B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1862F420-CACA-487E-920D-AAB20487620B}.Release|Any CPU.ActiveCfg = Release|Any CPU

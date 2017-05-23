@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp.Settings
 {
-    public enum Settings
+    public enum SettingName
     {
         IP,
         Port,
@@ -19,33 +19,31 @@ namespace WpfApp.Settings
     public sealed class SettingsManager
     {
         private static readonly SettingsManager _instance = new SettingsManager();
-
-        private Dictionary<Settings, string> settingNames;
-
-        public static SettingsManager Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
-
+        private Dictionary<SettingName, string> settingNames;
         private SettingsManager()
         {
-            settingNames = new Dictionary<Settings, string>();
-            settingNames.Add(Settings.IP, "Ip");
-            settingNames.Add(Settings.Port, "PortNum");
-            settingNames.Add(Settings.Width, "Width");
-            settingNames.Add(Settings.Height, "Height");
-            settingNames.Add(Settings.SearchAlgorithm, "SearchAlgo");
+            settingNames = new Dictionary<SettingName, string>();
+            settingNames.Add(SettingName.IP, "Ip");
+            settingNames.Add(SettingName.Port, "PortNum");
+            settingNames.Add(SettingName.Width, "Width");
+            settingNames.Add(SettingName.Height, "Height");
+            settingNames.Add(SettingName.SearchAlgorithm, "SearchAlgo");
         }
 
+        public static string ReadSetting(SettingName setting)
+        {
+            return _instance.getSetting(setting);
+        }
+        public static void UpdateSetting(SettingName setting, string value)
+        {
+            _instance.setSetting(setting, value);
+        }
 
-        public string ReadSetting(Settings setting)
+        public string getSetting(SettingName setting)
         {
             return ConfigurationManager.AppSettings[settingNames[setting]];
         }
-        public void UpdateSetting(Settings setting, string value)
+        public void setSetting(SettingName setting, string value)
         {
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             configuration.AppSettings.Settings[settingNames[setting]].Value = value;
@@ -53,6 +51,5 @@ namespace WpfApp.Settings
 
             ConfigurationManager.RefreshSection("appSettings");
         }
-
     }
 }

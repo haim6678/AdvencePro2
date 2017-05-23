@@ -1,0 +1,28 @@
+﻿<Window x:Class="WpfApp.Multi.Game.GameView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp.Multi.Game"
+        xmlns:other="clr-namespace:WpfApp.Other"
+        mc:Ignorable="d"
+        Title="GameView" KeyUp="HandleKeyUp" Closing="Window_Closing">
+    <Viewbox>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Center">
+                <Label Content="xd" />
+                <Label Content="ayy lmao" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center">
+                <other:MazeDraw
+                    Maze="{Binding Path=VM_Maze}"
+                    PlayerPos="{Binding Path=VM_MyPosition}"
+                    MinWidth="500" MinHeight="500" Margin="0,0,10,0"/>
+                <other:MazeDraw 
+                    Maze="{Binding Path=VM_Maze}"
+                    PlayerPos="{Binding Path=VM_OtherPosition}"
+                    MinWidth="500" MinHeight="500" Margin="10,0,0,0"/>
+            </StackPanel>
+    </StackPanel>
+    </Viewbox>
+</Window>

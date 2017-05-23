@@ -1,60 +1,79 @@
-﻿using System;
+﻿using MazeLib;
+using SharedData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls.Primitives;
+using WpfApp.Communication;
 using WpfApp.Other;
-using WpfApp.Single.PreGame;
+using WpfApp.Single.Menu;
 
 namespace WpfApp.Single
 {
     class SingleManager
     {
+        private string ip;
+        private int port;
 
-        private PreSingleGameWindow pre { get; set; }
-        private SinglePlayerView SingleView { get; set; }
-        private PreViewModel preVM { get; set; }
-        private PreSingleModel preModel { get; set; }
-        private SinglePlayerModel model { get; set; }
-        private SinglePlayerViewModel SingleVM { get; set; }
-
-        public SingleManager()
+        public SingleManager(string ip, int port)
         {
-            preModel = new PreSingleModel();
-            preModel.NotifStart += Manage;
-            preVM = new PreViewModel(preModel);
-            pre = new PreSingleGameWindow(preVM);
+            this.ip = ip;
+            this.port = port;
         }
 
         public void Start()
         {
-            pre.ShowDialog();
-        }
+            string cmd = GetCommandFromMenu();
+            if (cmd == null)
+                return;
+            //MessageBox.Show(string.Format("Command to send: '{0}'", cmd));
 
-        private void Manage()
-        {
-            pre.Close();
+            Communicator com = new Communicator(ip, port);
+            com.SendMessage(cmd);
+            cmd = com.ReadMessage();
+            com.Dispose();
 
-            model = new SinglePlayerModel();
-            model.Width = preModel.Width;
-            model.Height = preModel.Height;
-            model.Name = preModel.Name;
-            model.HandleFinish += Finish;
-            model.start();
-            SingleVM = new SinglePlayerViewModel(model);            
-            SingleView = new SinglePlayerView(SingleVM);
-            SingleView.Finish += Finish;
-            SingleView.Show();
-        }
+            Message m = Message.FromJSON(cmd);
+            if (m.MessageType != MessageType.CommandResult)
+            {
+                // received notification when not expecting it.
+                return;
+            }
 
-        private void Finish()
-        {
-            FinishWindowWiewModel vm = new FinishWindowWiewModel(model.FinishMassage);
-            FinishWindow view = new FinishWindow();
-            //todo check why this window does not display string
+            CommandResult res = CommandResult.FromJSON(m.Data);
+            // filter unwanted commands
+            if (res.Command != Command.Generate)
+                return;
+
+            if (!res.Success)
+            {
+                MessageBox.Show(res.Data);
+                return;
+            }
+
+            Maze maze = Maze.FromJSON(res.Data);
+
+            // successfully created a game. pass the handle to the GameModel and start.
+            SinglePlayerModel model = new SinglePlayerModel(maze);
+            SinglePlayerVM vm = new SinglePlayerVM(model);
+            SinglePlayerView view = new SinglePlayerView(vm);
+
             view.ShowDialog();
-            SingleView.Close();
+        }
+
+        private string GetCommandFromMenu()
+        {
+            // open multiplayer window
+            SingleMenuModel model = new SingleMenuModel();
+            SingleMenuVM vm = new SingleMenuVM(model);
+            SingleMenu mnu = new SingleMenu(vm);
+
+            string cmd;
+            mnu.ShowDialog(out cmd);
+            return cmd;
         }
     }
 }

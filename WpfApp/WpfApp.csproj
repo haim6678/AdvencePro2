@@ -40,6 +40,9 @@
     <Reference Include="MazeLib">
       <HintPath>..\MazeLib.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -65,37 +68,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustomControls\NumericUpDown.xaml.cs">
-      <DependentUpon>NumericUpDown.xaml</DependentUpon>
+    <Compile Include="Communication\Communicator.cs" />
+    <Compile Include="CustomControls\MazeConf.xaml.cs">
+      <DependentUpon>MazeConf.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Multi\Game\GameModel.cs" />
+    <Compile Include="Multi\Game\GameNotStartedException.cs" />
+    <Compile Include="Multi\Game\GameView.xaml.cs">
+      <DependentUpon>GameView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Multi\Communicator.cs" />
+    <Compile Include="Multi\Game\GameVM.cs" />
+    <Compile Include="Multi\Menu\MultiMenu.xaml.cs">
+      <DependentUpon>MultiMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Multi\Menu\MultiMenuVM.cs" />
+    <Compile Include="Multi\Menu\MultiMenuModel.cs" />
     <Compile Include="Multi\MultiManager.cs" />
-    <Compile Include="Multi\MultiModel.cs" />
-    <Compile Include="Multi\MultiView.xaml.cs">
-      <DependentUpon>MultiView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Multi\MultiViewModel.cs" />
-    <Compile Include="Multi\PreGame\PreMultiModel.cs" />
-    <Compile Include="Multi\PreGame\PreMultiViewModel.cs" />
-    <Compile Include="Multi\PreGame\PreMultiWindow.xaml.cs">
-      <DependentUpon>PreMultiWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Multi\Waitnig\Waiting.xaml.cs">
-      <DependentUpon>Waiting.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Multi\Waitnig\WaitViewModel.cs" />
-    <Compile Include="Multi\Waitnig\WatinModel.cs" />
-    <Compile Include="Other\FinishWindow.xaml.cs">
-      <DependentUpon>FinishWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Other\FinishWindowWiewModel.cs" />
     <Compile Include="Other\MazeDraw.xaml.cs">
       <DependentUpon>MazeDraw.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Other\Menu.xaml.cs">
+    <Compile Include="Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
@@ -105,21 +97,18 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsViewModel.cs" />
-    <Compile Include="Single\Confirm\ConfirmWindow.xaml.cs">
-      <DependentUpon>ConfirmWindow.xaml</DependentUpon>
+    <Compile Include="Single\Menu\SingleMenu.xaml.cs">
+      <DependentUpon>SingleMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Single\Menu\SingleMenuModel.cs" />
+    <Compile Include="Single\Menu\SingleMenuVM.cs" />
     <Compile Include="Single\Player.cs" />
-    <Compile Include="Single\PreGame\PreSingleGameWindow.xaml.cs">
-      <DependentUpon>PreSingleGameWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Single\PreGame\PreSingleModel.cs" />
-    <Compile Include="Single\PreGame\PreViewModel.cs" />
     <Compile Include="Single\SingleManager.cs" />
     <Compile Include="Single\SinglePlayerModel.cs" />
     <Compile Include="Single\SinglePlayerView.xaml.cs">
       <DependentUpon>SinglePlayerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Single\SinglePlayerViewModel.cs" />
+    <Compile Include="Single\SinglePlayerVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -139,6 +128,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -162,27 +152,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="CustomControls\NumericUpDown.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="CustomControls\MazeConf.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Multi\MultiView.xaml">
+    <Page Include="Multi\Game\GameView.xaml">
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Multi\PreGame\PreMultiWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Multi\Waitnig\Waiting.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Other\FinishWindow.xaml">
+    <Page Include="Multi\Menu\MultiMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -190,7 +168,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Other\Menu.xaml">
+    <Page Include="Menu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -198,13 +176,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Single\Confirm\ConfirmWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Single\Menu\SingleMenu.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Single\PreGame\PreSingleGameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Single\SinglePlayerView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -219,6 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\weed.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Single\Game\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

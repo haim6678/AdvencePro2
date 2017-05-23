@@ -19,17 +19,15 @@ namespace WpfApp.Single
     /// </summary>
     public partial class SinglePlayerView : Window
     {
-        public delegate void NotifyFinish();
+        public SinglePlayerVM vm;
 
-        public event NotifyFinish Finish;
-        public SinglePlayerViewModel ViewModel;
-
-        public SinglePlayerView(SinglePlayerViewModel vm)
+        public SinglePlayerView(SinglePlayerVM vm)
         {
-            this.ViewModel = vm;
-            this.DataContext = ViewModel;
-            ViewModel.SolveEvent += c;
             InitializeComponent();
+
+            this.vm = vm;
+            this.DataContext = this.vm;
+            this.vm.GameOver += GameOver;
         }
 
 
@@ -37,7 +35,7 @@ namespace WpfApp.Single
         {
             if (e != null)
             {
-                ViewModel.HandleMovement(e.Key);
+                vm.HandleMovement(e.Key);
             }
         }
 
@@ -45,23 +43,28 @@ namespace WpfApp.Single
 
         private void Solve_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Solve();
+            vm.Solve();
         }
-
-
+        
         private void Resatrt_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Restart();
+            vm.Restart();
         }
 
         private void Menu_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.BackToMenu();
+            this.Close();
         }
 
-        private void c()
+        public void GameOver(string message)
         {
-            this.Dispatcher.Invoke(Finish);
+            this.Dispatcher.Invoke(() =>
+            {
+                if (!this.IsActive)
+                    return;
+                MessageBox.Show(message);
+                this.Close();
+            });
         }
 
         #endregion

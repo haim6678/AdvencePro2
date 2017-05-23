@@ -58,10 +58,10 @@ namespace SharedData
         {
             JObject j = JObject.Parse(s);
             MoveUpdate mu = new MoveUpdate();
-            string str = (string)j["Direction"];
-            MazeLib.Direction d = (MazeLib.Direction)Enum.Parse(typeof(Direction), s);
-            mu.Direction = d;
             mu.GameName = (string)j["GameName"];
+            string str = (string)j["Direction"];
+            Direction d = (Direction)Enum.Parse(typeof(Direction), str);
+            mu.Direction = d;
             return mu;
         }
     }

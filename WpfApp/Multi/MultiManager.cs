@@ -1,73 +1,69 @@
-﻿using System;
+﻿using SharedData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using WpfApp.Communication;
+using WpfApp.Multi.Game;
+using WpfApp.Multi.Menu;
 
 namespace WpfApp.Multi
 {
     class MultiManager
     {
-        private Communicator com { get; set; }
+        private string ip;
+        private int port;
+        // operation: open menu. get needed operation.
+        // then 
 
-        public delegate void Notify();
-
-        public event Notify NotifyFinish;
-
-        private PreMultiModel preModel;
-        private PreMultiViewModel preVM;
-        private PreMultiWindow preView;
-        private MultiView multi;
-        private MultiModel multiModel;
-        private MultiViewModel multiVM;
-
-        public MultiManager(string port, string ip)
+        public MultiManager(string ip, int port)
         {
-            com = new Communicator(port, ip);
-            preModel = new PreMultiModel(com);
-            preModel.NotifyStart += StartNewMulti;
-            preVM = new PreMultiViewModel(preModel);
-            preView = new PreMultiWindow(preVM);
+            this.ip = ip;
+            this.port = port;
         }
 
         public void Start()
         {
-            preView.ShowDialog();
-        }
+            string cmd = GetCommandFromMenu();
+            // if user did not start or join a game
+            if (cmd == null)
+                return;
 
-        private void StartNewMulti(string s)
-        {
-            switch (s)
+            //MessageBox.Show("Command to send " + cmd);
+
+            // then we have a command to send.
+            // create async communicator. send the command, get response for join or start.
+            // if unsuccessfull, prompt the user with a message, and return
+            // if successfull, unlink the event of asyncComm, send the communicator to
+            // the GameModel, and show it.
+
+            // successfully created a game. pass the handle to the GameModel and start.
+            try
             {
-                case "join":
-                    s = s + " " + preModel.Name;
-                    break;
-                case "start":
-                    s = s + " " + preModel.Name + " " + preModel.Width + " " + preModel.Height;
-                    //todo width then height or the other way?
-                    break;
-                default:
-                    s = null;
-                    break;
-            }
-
-            if (s != null)
+                using (GameModel gmod = new GameModel(cmd))
+                using (GameVM gvm = new GameVM(gmod))
+                {
+                    GameView gv = new GameView(gvm);
+                    gv.ShowDialog();
+                }
+            }catch(GameNotStartedException e)
             {
-                multiModel = new MultiModel(com, s);
-                multiModel.NotifyFinish += FinishGame;
-                multiVM = new MultiViewModel(multiModel);
-                MultiView multi = new MultiView(multiVM);
-
-                multi.Show();
+                MessageBox.Show(e.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void FinishGame()
+        private string GetCommandFromMenu()
         {
-            com.StopListenning();
-            //todo display window with detailes on who closed the game 
-            //todo the info is in the finish message in the model
-            multi.Close();
+            // open multiplayer window
+            MultiMenuModel model = new MultiMenuModel();
+            MultiMenuVM vm = new MultiMenuVM(model);
+            MultiMenu mnu = new MultiMenu(vm);
+
+            string cmd;
+            mnu.ShowDialog(out cmd);
+            return cmd;
         }
     }
 }
