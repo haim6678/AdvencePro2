@@ -11,8 +11,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MazeLib;
-using System.Windows;
 using SharedData;
+using WpfApp.Settings;
+using WpfApp.Communication;
+using Newtonsoft.Json;
 
 namespace WpfApp
 {
@@ -23,57 +25,73 @@ namespace WpfApp
         public delegate void GameOverHandler(string message);
         public event GameOverHandler GameOver;
 
+        private volatile bool solving;
+
         public SinglePlayerModel(Maze m)
         {
             this.Maze = m;
             this.Position = this.Maze.InitialPos;
+            solving = false;
         }
 
         #region Solve
 
         public void Solve()
         {
-            string str = ConfigurationManager.AppSettings["SearchAlgo"];
-            //Communicate("solve " + Maze.Name + " " + str);
-            //todo what string to represent when the user pressed solve?
+            string cmd = SettingsManager.ReadSetting(SettingName.SearchAlgorithm);
+            string ip = SettingsManager.ReadSetting(SettingName.IP);
+            int port = int.Parse(SettingsManager.ReadSetting(SettingName.Port));
+
+            Communicator c = new Communicator(ip, port);
+            cmd = string.Format("solve {0} {1}", Maze.Name, cmd);
+            c.SendMessage(cmd);
+            cmd = c.ReadMessage();
+            c.Dispose();
+
+            Message m = Message.FromJSON(cmd);
+            if (m.MessageType != MessageType.CommandResult)
+                return;
+
+            CommandResult res = CommandResult.FromJSON(m.Data);
+            if (res.Command != Command.Solve)
+                return;
+
+            solving = true;
+            MazeSolution sol = MazeSolution.FromJSON(res.Data);
+            new Task(() => AnimateSolution(sol)).Start();
         }
 
-        private void AnimateSolution(string s)
+        private void AnimateSolution(MazeSolution sol)
         {
-            string str = s;
-            string[] arr = str.Split(',');
-            str = arr[2];
-            arr = str.Split(':');
-            str = arr[1];
-
-            str.Replace("\r", "");
-            str.Replace("\n", "");
-
-            Console.WriteLine(str);
+            Position = Maze.InitialPos;
+            string str = sol.Solution;
             for (int i = 0; i < str.Length; i++)
             {
+                Direction d;
                 switch (str[i])
                 {
                     //go left
                     case '0':
-                        this.Position = new Position(this.position.Row, this.position.Col - 1);
+                        d = Direction.Left;
                         break;
                     //go right
                     case '1':
-                        this.Position = new Position(this.position.Row, this.position.Col + 1);
+                        d = Direction.Right;
                         break;
                     //go up
                     case '2':
-                        this.Position = new Position(this.position.Row - 1, this.position.Col);
+                        d = Direction.Up;
                         break;
                     //go down          
                     case '3':
-                        this.Position = new Position(this.position.Row + 1, this.position.Col);
+                        d = Direction.Down;
                         break;
                     default:
+                        d = Direction.Unknown;
                         break;
                 }
-                System.Threading.Thread.Sleep(500);
+                Move(d);
+                Thread.Sleep(500);
             }
 
             GameOver?.Invoke("The maze has been solved :)");
@@ -90,7 +108,7 @@ namespace WpfApp
             set
             {
                 this.maze = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Maze")); //todo check
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Maze"));
             }
         }
 
@@ -104,7 +122,7 @@ namespace WpfApp
                 if ((p.Row != position.Row) || (p.Col != position.Col))
                 {
                     this.position = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Position")); //todo check
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Position"));
                 }
             }
         }
@@ -115,6 +133,20 @@ namespace WpfApp
 
         public void HandleMovement(Direction d)
         {
+            if (solving)
+                return;
+
+            Move(d);
+
+            if (Position.Col == Maze.GoalPos.Col && Position.Row == Maze.GoalPos.Row)
+            {
+                // handle win
+                GameOver?.Invoke("Congratulations! You won!");
+            }
+        }
+
+        private void Move(Direction d)
+        {
             Position pos = GetEstimatedPosition(Position, d);
             if (pos.Col < 0 || pos.Col >= Maze.Cols)
                 return;
@@ -124,51 +156,6 @@ namespace WpfApp
                 return;
 
             Position = pos;
-            if (Position.Col == Maze.GoalPos.Col && Position.Row == Maze.GoalPos.Row)
-            {
-                // handle win
-                MessageBox.Show("Congratulations! You won!", "You Won!", MessageBoxButton.OK, MessageBoxImage.None);
-                
-            }
-        }
-
-        private Position HandleMove(Key k)
-        {
-            Position pos = new Position(-1, -1);
-
-            switch (k)
-            {
-                case Key.Down:
-                    if ((position.Row + 1 < maze.Rows) &&
-                        (maze[position.Row + 1, position.Col] == CellType.Free))
-                    {
-                        pos = new Position(position.Row + 1, position.Col);
-                    }
-                    break;
-                case Key.Up:
-                    if ((position.Row - 1 >= 0) && (maze[position.Row - 1, position.Col] == CellType.Free))
-                    {
-                        pos = new Position(position.Row - 1, position.Col);
-                    }
-                    break;
-                case Key.Left:
-                    if ((position.Col - 1 >= 0) && (maze[position.Row, position.Col - 1] == CellType.Free))
-                    {
-                        pos = new Position(position.Row, position.Col - 1);
-                    }
-                    break;
-                case Key.Right:
-                    if ((position.Col + 1 < maze.Cols) &&
-                        (maze[position.Row, position.Col + 1] == CellType.Free))
-                    {
-                        pos = new Position(position.Row, position.Col + 1);
-                    }
-                    break;
-                default:
-                    pos = new Position(-1, -1);
-                    break;
-            }
-            return pos;
         }
 
         #endregion

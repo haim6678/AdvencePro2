@@ -16,25 +16,23 @@ namespace WpfApp.Multi.Menu
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string ip;
-        private int port;
-
-        public MultiMenuModel(string ip, int port)
+        public MultiMenuModel()
         {
-            this.ip = ip;
-            this.port = port;
             CommandToSend = null;
             UpdateAvailableGames();
             // load default values
             MazeName = "I_like_turtles";
-            MazeColumns = uint.Parse(SettingsManager.Instance.ReadSetting(SettingName.Width));
-            MazeRows = uint.Parse(SettingsManager.Instance.ReadSetting(SettingName.Height));
+            MazeColumns = uint.Parse(SettingsManager.ReadSetting(SettingName.Width));
+            MazeRows = uint.Parse(SettingsManager.ReadSetting(SettingName.Height));
         }
 
         public void UpdateAvailableGames()
         {
             List<string> availableGames = null;
-            Communicator c = new Communicator(ip, port);
+            Communicator c = new Communicator(
+                SettingsManager.ReadSetting(SettingName.IP), 
+                int.Parse(SettingsManager.ReadSetting(SettingName.Port)));
+
             c.SendMessage("list");
             string response = c.ReadMessage();
 
@@ -57,11 +55,11 @@ namespace WpfApp.Multi.Menu
             // dispose the communicator
             c.Dispose();
 
-            this.GameList = new ObservableCollection<string>(availableGames);
+            this.GameList = availableGames;
         }
 
-        private ObservableCollection<string> gameList;
-        public ObservableCollection<string> GameList
+        private List<string> gameList;
+        public List<string> GameList
         {
             get { return gameList; }
             private set

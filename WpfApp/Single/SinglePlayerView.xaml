@@ -13,12 +13,12 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Center" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
-            <Button x:Name="Solve" Content="Solve" Click="Solve_OnClick" Margin="30,0,50,0" Width="49" Height="10"
-                    FontSize="6" />
-            <Button x:Name="Resatrt" Content="Restart" Click="Resatrt_OnClick" Margin="0,0,40,0" Width="49" Height="10"
-                    FontSize="6" />
-            <Button x:Name="Menu" Click="Menu_OnClick" Content="Menu" Margin="0,0,80,0" Width="49" Height="10"
-                    FontSize="6" />
+            <Button x:Name="Solve" Content="Solve" Click="Solve_OnClick"
+                    FontSize="10" Margin="5,0" />
+            <Button x:Name="Resatrt" Content="Restart" Click="Resatrt_OnClick"
+                    FontSize="10" Margin="5,0"/>
+            <Button x:Name="Menu" Click="Menu_OnClick" Content="Menu" Margin="5,0"
+                    FontSize="10" />
         </StackPanel>
         <control:MazeDraw Grid.Row="1" x:Name="MazeDraw"
                           Maze="{Binding Path=VM_Maze}"

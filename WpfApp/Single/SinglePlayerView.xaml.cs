@@ -19,16 +19,15 @@ namespace WpfApp.Single
     /// </summary>
     public partial class SinglePlayerView : Window
     {
-        public delegate void NotifyFinish();
-        
-        public event NotifyFinish Finish;
         public SinglePlayerVM vm;
 
         public SinglePlayerView(SinglePlayerVM vm)
         {
+            InitializeComponent();
+
             this.vm = vm;
             this.DataContext = this.vm;
-            InitializeComponent();
+            this.vm.GameOver += GameOver;
         }
 
 
@@ -57,9 +56,15 @@ namespace WpfApp.Single
             this.Close();
         }
 
-        private void c()
+        public void GameOver(string message)
         {
-            this.Dispatcher.Invoke(Finish);
+            this.Dispatcher.Invoke(() =>
+            {
+                if (!this.IsActive)
+                    return;
+                MessageBox.Show(message);
+                this.Close();
+            });
         }
 
         #endregion

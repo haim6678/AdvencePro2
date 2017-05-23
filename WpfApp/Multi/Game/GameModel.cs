@@ -3,11 +3,13 @@ using SharedData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp.Communication;
+using WpfApp.Settings;
 
 namespace WpfApp.Multi.Game
 {
@@ -18,24 +20,28 @@ namespace WpfApp.Multi.Game
         public delegate void GameStartedHandler();
         public event GameStartedHandler GameStarted;
 
-        public delegate void GameFinishedHandler(string reason);
-        public event GameFinishedHandler GameFinished;
+        public delegate void GameOverHandler(string reason);
+        public event GameOverHandler GameOver;
 
         // events:  game started:
         //          game finished(reason):
         //              - win of player
         //              - exit of player
-
         private Communicator com;
 
-        public GameModel(Communicator handle)
+        public GameModel(string commandToStart)
         {
             this.maze = null;
 
-            this.com = handle;
+            this.com = new Communicator(
+                SettingsManager.ReadSetting(SettingName.IP),
+                int.Parse(SettingsManager.ReadSetting(SettingName.Port)));
             this.com.DataReceived += DataReceived;
             this.com.StartListening();
+
+            this.com.SendMessage(commandToStart);
         }
+
 
         private Maze maze;
         public Maze Maze
@@ -43,25 +49,21 @@ namespace WpfApp.Multi.Game
             get { return this.maze; }
             private set
             {
-                if (!maze.Equals(value))
-                {
-                    this.maze = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Maze"));
-                }
+                this.maze = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Maze"));
+                MyPosition = Maze.InitialPos;
+                OtherPosition = Maze.InitialPos;
             }
         }
 
-        private Position currPos;
-        public Position CurrentPosition
+        private Position myPos;
+        public Position MyPosition
         {
-            get { return currPos; }
+            get { return myPos; }
             private set
             {
-                if (!currPos.Equals(value))
-                {
-                    currPos = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentPosition"));
-                }
+                myPos = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MyPosition"));
             }
         }
 
@@ -71,22 +73,26 @@ namespace WpfApp.Multi.Game
             get { return otherPos; }
             private set
             {
-                if (!otherPos.Equals(value))
-                {
-                    otherPos = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OtherPosition"));
-                }
+                otherPos = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OtherPosition"));
             }
+        }
+
+        public void HandleMovement(Direction d)
+        {
+            com.SendMessage("play " + d.ToString().ToLower());
         }
 
         private void DataReceived(string data)
         {
+            Debug.WriteLine("Data Received: " + data);
             Message m = Message.FromJSON(data);
-            if(m.MessageType == MessageType.CommandResult)
+            if (m.MessageType == MessageType.CommandResult)
             {
                 CommandResult res = CommandResult.FromJSON(m.Data);
                 HandleCommandResult(res);
-            }else if(m.MessageType == MessageType.Notification)
+            }
+            else if (m.MessageType == MessageType.Notification)
             {
                 Notification n = Notification.FromJSON(m.Data);
                 HandleNotification(n);
@@ -98,15 +104,18 @@ namespace WpfApp.Multi.Game
             switch (n.NotificationType)
             {
                 case Notification.Type.GameStarted:
-                    this.Maze = Maze.FromJSON(n.Data);
+                    // if game already started
+                    if (Maze != null)
+                        return;
+                    Maze = Maze.FromJSON(n.Data);
                     GameStarted?.Invoke();
                     break;
                 case Notification.Type.GameOver:
-                    GameFinished?.Invoke(n.Data);
+                    GameOver?.Invoke(n.Data);
                     break;
                 case Notification.Type.PlayerMoved:
                     MoveUpdate mu = MoveUpdate.FromJSON(n.Data);
-                    OtherPosition = GetEstimatedPosition(CurrentPosition, mu.Direction);
+                    OtherPosition = GetEstimatedPosition(OtherPosition, mu.Direction);
                     break;
                 default:
                     break;
@@ -115,14 +124,23 @@ namespace WpfApp.Multi.Game
 
         private void HandleCommandResult(CommandResult res)
         {
+            if (res.Command != Command.Play)
+            {
+                if (!res.Success)
+                    throw new GameNotStartedException(res.Data);
+                return;
+            }
+
             if (!res.Success)
                 return;
 
-            if (res.Command != Command.Play)
-                return;
-
             Direction d = (Direction)Enum.Parse(typeof(Direction), res.Data);
-            CurrentPosition = GetEstimatedPosition(CurrentPosition, d);
+            MyPosition = GetEstimatedPosition(MyPosition, d);
+        }
+
+        public void CloseGame()
+        {
+            com.SendMessage("close " + Maze.Name);
         }
 
         private static Position GetEstimatedPosition(Position p, Direction d)
@@ -144,6 +162,7 @@ namespace WpfApp.Multi.Game
             }
             return p;
         }
+
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 

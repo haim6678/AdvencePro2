@@ -39,8 +39,8 @@ namespace WpfApp
 
         private void Multi_OnClick(object sender, RoutedEventArgs e)
         {
-            string ip = SettingsManager.Instance.ReadSetting(SettingName.IP);
-            int port = int.Parse(SettingsManager.Instance.ReadSetting(SettingName.Port));
+            string ip = SettingsManager.ReadSetting(SettingName.IP);
+            int port = int.Parse(SettingsManager.ReadSetting(SettingName.Port));
             MultiManager starter = new MultiManager(ip, port);
 
             this.Hide();
@@ -50,8 +50,8 @@ namespace WpfApp
 
         private void Single_OnClick(object sender, RoutedEventArgs e)
         {
-            string ip = SettingsManager.Instance.ReadSetting(SettingName.IP);
-            int port = int.Parse(SettingsManager.Instance.ReadSetting(SettingName.Port));
+            string ip = SettingsManager.ReadSetting(SettingName.IP);
+            int port = int.Parse(SettingsManager.ReadSetting(SettingName.Port));
             SingleManager manager = new SingleManager(ip, port);
             manager.Start();
         }

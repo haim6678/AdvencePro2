@@ -13,9 +13,8 @@ namespace WpfApp
     public class SinglePlayerVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        
         private SinglePlayerModel model;
-
         public SinglePlayerVM(SinglePlayerModel mod)
         {
             model = mod;
@@ -27,7 +26,18 @@ namespace WpfApp
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VM_" + e.PropertyName));
         }
 
-        #region properties
+
+        public event SinglePlayerModel.GameOverHandler GameOver
+        {
+            add
+            {
+                model.GameOver += value;
+            }
+            remove
+            {
+                model.GameOver -= value;
+            }
+        }
 
         public Maze VM_Maze
         {
@@ -37,15 +47,6 @@ namespace WpfApp
         public Position VM_Position
         {
             get { return model.Position; }
-        }
-
-        #endregion
-
-        #region Movemonet
-
-        public void NewLocation(Position p)
-        {
-            //todo draw the new location
         }
 
         public void HandleMovement(Key k)
@@ -71,25 +72,14 @@ namespace WpfApp
             model.HandleMovement(d);
         }
 
-        #endregion
-
-        #region solve
-
         public void Solve()
         {
             model.Solve();
         }
 
-        #endregion
-
-        #region resatrt
-
         public void Restart()
         {
-            // TODO : add confirmation
             model.Restart();
         }
-
-        #endregion
     }
 }

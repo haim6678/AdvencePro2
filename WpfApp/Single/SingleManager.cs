@@ -29,7 +29,7 @@ namespace WpfApp.Single
             string cmd = GetCommandFromMenu();
             if (cmd == null)
                 return;
-            MessageBox.Show(string.Format("Command to send: '{0}'", cmd));
+            //MessageBox.Show(string.Format("Command to send: '{0}'", cmd));
 
             Communicator com = new Communicator(ip, port);
             com.SendMessage(cmd);

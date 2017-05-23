@@ -31,8 +31,7 @@ namespace WpfApp.Multi
             if (cmd == null)
                 return;
 
-            MessageBox.Show("Command to send " + cmd);
-            return;
+            //MessageBox.Show("Command to send " + cmd);
 
             // then we have a command to send.
             // create async communicator. send the command, get response for join or start.
@@ -40,51 +39,25 @@ namespace WpfApp.Multi
             // if successfull, unlink the event of asyncComm, send the communicator to
             // the GameModel, and show it.
 
-            Communicator com = new Communicator(ip, port);
-            com.SendMessage(cmd);
-            cmd = com.ReadMessage();
-            Message m = Message.FromJSON(cmd);
-
-            if (m.MessageType != MessageType.CommandResult)
-            {
-                // received notification when not expecting it.
-                com.Dispose();
-                return;
-            }
-
-            CommandResult res = CommandResult.FromJSON(m.Data);
-            // filter unwanted commands
-            switch (res.Command)
-            {
-                case Command.Start:
-                case Command.Join:
-                    break;
-                default:
-                    // received different response for some reason
-                    com.Dispose();
-                    return;
-            }
-
-            if (!res.Success)
-            {
-                // failde to start / join a game
-                com.Dispose();
-                MessageBox.Show(res.Data);
-                return;
-            }
-
             // successfully created a game. pass the handle to the GameModel and start.
-            GameModel gmod = new GameModel(com);
-            GameVM gvm = new GameVM(gmod);
-            GameView gv = new GameView(gvm);
-
-            gv.ShowDialog();
+            try
+            {
+                using (GameModel gmod = new GameModel(cmd))
+                using (GameVM gvm = new GameVM(gmod))
+                {
+                    GameView gv = new GameView(gvm);
+                    gv.ShowDialog();
+                }
+            }catch(GameNotStartedException e)
+            {
+                MessageBox.Show(e.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private string GetCommandFromMenu()
         {
             // open multiplayer window
-            MultiMenuModel model = new MultiMenuModel(ip, port);
+            MultiMenuModel model = new MultiMenuModel();
             MultiMenuVM vm = new MultiMenuVM(model);
             MultiMenu mnu = new MultiMenu(vm);
 

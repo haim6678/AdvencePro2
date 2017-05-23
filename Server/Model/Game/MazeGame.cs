@@ -52,9 +52,7 @@ namespace Server.Model.Game
         }
 
         #endregion
-
-       
-
+        
         /// <summary>
         /// Starts this instance.
         /// </summary>

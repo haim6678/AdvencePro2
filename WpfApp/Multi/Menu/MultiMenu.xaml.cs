@@ -44,7 +44,7 @@ namespace WpfApp.Multi.Menu
                 MessageBox.Show("You must choose a game to join!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-           vm.SetJoinCommand(ListBox.SelectedItem.ToString());
+            vm.SetJoinCommand(ListBox.SelectedItem.ToString());
             this.Close();
         }
 

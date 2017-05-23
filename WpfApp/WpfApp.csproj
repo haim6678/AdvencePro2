@@ -73,6 +73,7 @@
       <DependentUpon>MazeConf.xaml</DependentUpon>
     </Compile>
     <Compile Include="Multi\Game\GameModel.cs" />
+    <Compile Include="Multi\Game\GameNotStartedException.cs" />
     <Compile Include="Multi\Game\GameView.xaml.cs">
       <DependentUpon>GameView.xaml</DependentUpon>
     </Compile>

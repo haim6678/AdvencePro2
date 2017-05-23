@@ -19,17 +19,7 @@ namespace WpfApp.Settings
     public sealed class SettingsManager
     {
         private static readonly SettingsManager _instance = new SettingsManager();
-
         private Dictionary<SettingName, string> settingNames;
-
-        public static SettingsManager Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
-
         private SettingsManager()
         {
             settingNames = new Dictionary<SettingName, string>();
@@ -40,12 +30,20 @@ namespace WpfApp.Settings
             settingNames.Add(SettingName.SearchAlgorithm, "SearchAlgo");
         }
 
+        public static string ReadSetting(SettingName setting)
+        {
+            return _instance.getSetting(setting);
+        }
+        public static void UpdateSetting(SettingName setting, string value)
+        {
+            _instance.setSetting(setting, value);
+        }
 
-        public string ReadSetting(SettingName setting)
+        public string getSetting(SettingName setting)
         {
             return ConfigurationManager.AppSettings[settingNames[setting]];
         }
-        public void UpdateSetting(SettingName setting, string value)
+        public void setSetting(SettingName setting, string value)
         {
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             configuration.AppSettings.Settings[settingNames[setting]].Value = value;
@@ -53,6 +51,5 @@ namespace WpfApp.Settings
 
             ConfigurationManager.RefreshSection("appSettings");
         }
-
     }
 }

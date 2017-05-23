@@ -13,8 +13,8 @@ namespace WpfApp.Single.Menu
         {
             this.CommandToSend = null;
             this.MazeName = "rush_b";
-            MazeColumns = uint.Parse(SettingsManager.Instance.ReadSetting(SettingName.Width));
-            MazeRows = uint.Parse(SettingsManager.Instance.ReadSetting(SettingName.Height));
+            MazeColumns = uint.Parse(SettingsManager.ReadSetting(SettingName.Width));
+            MazeRows = uint.Parse(SettingsManager.ReadSetting(SettingName.Height));
         }
         
         public string MazeName

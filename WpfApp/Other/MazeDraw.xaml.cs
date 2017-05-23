@@ -24,80 +24,82 @@ namespace WpfApp.Other
     {
         #region members
 
-        private Rectangle[,] rectangles;
-        private ImageBrush PlayerimageBrush;
-        private ImageBrush ExitimageBrush;
-
-        private SolidColorBrush blackBrush;
-        private SolidColorBrush whitheBrush;
-        private SolidColorBrush blueBrush;
-        private double RecWidth;
-        private double RecHeight; //todo relative
-        private static Rectangle pos { get; set; } //todo will work with static
-        private Rectangle GoalPos { get; set; }
+        internal Rectangle Player { get; private set; }
 
         #endregion
 
         public MazeDraw()
         {
-            PlayerimageBrush = new ImageBrush(new BitmapImage(
-                new Uri(@"pack://application:,,,/WpfApp;component/Images/snoop-dogg.jpg")));
-
-            ExitimageBrush = new ImageBrush(new BitmapImage(
-                new Uri(@"pack://application:,,,/WpfApp;component/Images/images.jpg")));
-            blackBrush = new SolidColorBrush(Colors.Black);
-            whitheBrush = new SolidColorBrush(Colors.White);
-            blueBrush = new SolidColorBrush(Colors.Blue);
-            pos = new Rectangle();
-            GoalPos = new Rectangle();
+            Player = new Rectangle();
             InitializeComponent();
         }
 
-        private void MazeDraw_OnLoaded(object sender, RoutedEventArgs e)
+        public void Draw()
+        {
+            InitializeCanvas();
+            double recWidth = MyCanvas.Width / Maze.Cols;
+            double recHeight = MyCanvas.Height / Maze.Rows;
+
+            DrawBoard(recWidth, recHeight);
+            DrawGoal(recWidth, recHeight);
+            DrawPlayer(recWidth, recHeight);
+        }
+
+        private void InitializeCanvas()
         {
             this.MyCanvas.Height = Maze.Rows;
             this.MyCanvas.Width = Maze.Cols;
-            RecWidth = this.MyCanvas.Width / Maze.Cols;
-            RecHeight = this.MyCanvas.Height / Maze.Rows; //todo fixed size,or relative like this?
-            rectangles = new Rectangle[Maze.Rows, Maze.Cols];
+        }
 
+        private void DrawBoard(double recWidth, double recHeight)
+        {
             for (int i = 0; i < Maze.Rows; i++)
             {
                 for (int j = 0; j < Maze.Cols; j++)
                 {
-                    rectangles[i, j] = new Rectangle();
-                    rectangles[i, j].Width = RecWidth;
-                    rectangles[i, j].Height = RecHeight;
+                    Rectangle r = new Rectangle()
+                    {
+                        Width = recWidth,
+                        Height = recHeight,
+                        Fill = (Maze[i, j] == CellType.Wall) ? Brushes.Black : Brushes.White
+                    };
 
-                    if (Maze[i, j] == CellType.Wall)
-                    {
-                        rectangles[i, j].Fill = blackBrush;
-                    }
-                    else
-                    {
-                        rectangles[i, j].Fill = whitheBrush;
-                    }
-                    this.MyCanvas.Children.Add(rectangles[i, j]);
-                    double x = i * RecHeight;
-                    double y = j * RecWidth;
-                    Canvas.SetTop(rectangles[i, j], i * RecHeight);
-                    Canvas.SetLeft(rectangles[i, j], j * RecWidth); //todo fix location according to size
+                    this.MyCanvas.Children.Add(r);
+                    double y = i * recHeight;
+                    double x = j * recWidth;
+                    Canvas.SetTop(r, y);
+                    Canvas.SetLeft(r, x);
                 }
             }
+        }
 
-            pos.Fill = PlayerimageBrush;
-            pos.Width = RecWidth;
-            pos.Height = RecHeight;
-            MyCanvas.Children.Add(pos);
-            Canvas.SetTop(pos, Maze.InitialPos.Row); //todo y first as top???
-            Canvas.SetLeft(pos, Maze.InitialPos.Col);
+        private void DrawGoal(double recWidth, double recHeight)
+        {
+            ImageBrush goalBrush = new ImageBrush(new BitmapImage(
+                new Uri(@"pack://application:,,,/WpfApp;component/Images/images.jpg")));
+            Rectangle goal = new Rectangle()
+            {
+                Width = recWidth,
+                Height = recHeight,
+                Fill = goalBrush
+            };
+            MyCanvas.Children.Add(goal);
+            Canvas.SetTop(goal, Maze.GoalPos.Row);
+            Canvas.SetLeft(goal, Maze.GoalPos.Col);
+        }
 
-            GoalPos.Fill = ExitimageBrush;
-            GoalPos.Width = RecWidth;
-            GoalPos.Height = RecHeight;
-            MyCanvas.Children.Add(GoalPos);
-            Canvas.SetTop(GoalPos, Maze.GoalPos.Row); //todo y first as top???
-            Canvas.SetLeft(GoalPos, Maze.GoalPos.Col);
+        private void DrawPlayer(double recWidth, double recHeight)
+        {
+            ImageBrush player = new ImageBrush(new BitmapImage(
+                new Uri(@"pack://application:,,,/WpfApp;component/Images/snoop-dogg.jpg")));
+            // player pos
+            Player.Width = recWidth;
+            Player.Height = recHeight;
+            Player.Fill = player;
+
+            MyCanvas.Children.Add(Player);
+            Canvas.SetTop(Player, Maze.InitialPos.Row);
+            Canvas.SetLeft(Player, Maze.InitialPos.Col);
         }
 
         #region Properties
@@ -109,8 +111,7 @@ namespace WpfApp.Other
 
         // Using a DependencyProperty as the backing store for Maze.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MazeProperty =
-            DependencyProperty.Register("Maze", typeof(Maze), typeof(MazeDraw));
-
+            DependencyProperty.Register("Maze", typeof(Maze), typeof(MazeDraw), new UIPropertyMetadata(HandleNewMaze));
 
 
         public Position PlayerPos
@@ -122,22 +123,24 @@ namespace WpfApp.Other
         // Using a DependencyProperty as the backing store for PlayerPos.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PlayerPosProperty =
             DependencyProperty.Register("PlayerPos", typeof(Position), typeof(MazeDraw), new UIPropertyMetadata(HandleNewPos));
-
-
-
+        
         #endregion
 
-        #region Positions
+        private static void HandleNewMaze(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Maze m = e.NewValue as Maze;
+            MazeDraw md = d as MazeDraw;
+            
+            md.Draw();
+        }
 
         private static void HandleNewPos(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Position s = (Position)e.NewValue;
             MazeDraw m = d as MazeDraw;
 
-            Canvas.SetTop(pos, s.Row);
-            Canvas.SetLeft(pos, s.Col);
+            Canvas.SetTop(m.Player, s.Row);
+            Canvas.SetLeft(m.Player, s.Col);
         }
-
-        #endregion
     }
 }

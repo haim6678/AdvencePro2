@@ -25,7 +25,7 @@ namespace WpfApp.Multi.Menu
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VM_" + e.PropertyName));
         }
 
-        public ObservableCollection<string> VM_GameList
+        public List<string> VM_GameList
         {
             get { return model.GameList; }
         }

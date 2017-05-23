@@ -66,7 +66,7 @@ namespace WpfApp.Communication
                     string msg = reader.ReadString();
                     DataReceived?.Invoke(msg);
                 }
-                catch (Exception e)
+                catch (Exception e) when (e is IOException || e is EndOfStreamException || e is ObjectDisposedException)
                 {
                     listening = false;
                     Console.WriteLine(e.Message);
