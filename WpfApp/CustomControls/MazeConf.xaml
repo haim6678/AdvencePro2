@@ -18,15 +18,15 @@
 
         <Label Content="Maze Name:" 
                Grid.Row="0" Grid.Column="0"/>
-        <TextBox Name="txtName" Text="{Binding Path=MazeName}"
+        <TextBox Name="txtName" Text="{Binding Path=MazeName}" MaxLength="3"
                    Grid.Row="0" Grid.Column="1" MinWidth="75" Margin="0,2.5"/>
         <Label Content="Maze Rows:"
                Grid.Row="1" Grid.Column="0" />
-        <TextBox Name="txtRows" Text="{Binding Path=MazeRows}"
+        <TextBox Name="txtRows" Text="{Binding Path=MazeRows}" MaxLength="3"
                    Grid.Row="1" Grid.Column="1" MinWidth="75" Margin="0,2.5"/>
         <Label Content="Maze Columns" 
                Grid.Row="2" Grid.Column="0" />
-        <TextBox Name="txtColumns" Text="{Binding Path=MazeColumns}"
+        <TextBox Name="txtColumns" Text="{Binding Path=MazeColumns}" MaxLength="3"
                    Grid.Row="2" Grid.Column="1" MinWidth="75" Margin="0,2.5"/>
     </Grid>
 </UserControl>

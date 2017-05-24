@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,13 +48,13 @@ namespace WpfApp.CustomControls
 
         // Using a DependencyProperty as the backing store for MazeRows.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MazeRowsProperty =
-            DependencyProperty.Register("MazeRows", typeof(uint), typeof(MazeConf));
+            DependencyProperty.Register("MazeRows", typeof(string), typeof(MazeConf));
 
 
 
         public uint MazeColumns
         {
-            get { return (uint)GetValue(MazeColumnsProperty); }
+            get { return uint.Parse( GetValue(MazeColumnsProperty) as string); }
             set { SetValue(MazeColumnsProperty, value); }
         }
 
@@ -62,7 +63,7 @@ namespace WpfApp.CustomControls
             DependencyProperty.Register("MazeColumns", typeof(uint), typeof(MazeConf));
 
 
-
-
+       
     }
 }
+
