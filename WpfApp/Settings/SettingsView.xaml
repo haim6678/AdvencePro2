@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="Setting" Height="500" Width="800" >
+        Title="Setting" Height="500" Width="800" MinWidth="300" MinHeight="256" >
     <Window.Background>
-        <ImageBrush ImageSource="../Images/gear-wallpaper-6-1024x576.jpg"></ImageBrush>
+        <ImageBrush ImageSource="../Images/gear-wallpaper-6-1024x576.jpg" />
     </Window.Background>
-    <Grid >
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="256" MinHeight="170" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -19,22 +19,42 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Background="Coral" Foreground="WhiteSmoke" Margin="150,50,0,0">IP:</Label>
-        <TextBox Grid.Column="1" Margin="0,50,392.6,24.8" Name="Ip" Grid.RowSpan="2"  Text= "{Binding VM_IP}"/>
-        <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="1" Margin="150,0,0,0">PORT:</Label>
-        <TextBox Name="Port" Margin="0,0.4,392.6,0.2" Grid.Column="1" Grid.Row="1" Text="{Binding VM_Port}"></TextBox>
-        <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="2" Margin="150,0,0,0">WIDTH:</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Name="Width" Margin="0,0.4,392.6,0.2" Text="{Binding VM_MazeWidth}"></TextBox>
-        <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="3" Margin="150,0,0,0">HEIGHT:</Label>
-        <TextBox Grid.Row="3" Grid.Column="1" Name="Height" Margin="0,0.4,392.6,0.2" Text="{Binding VM_MazeHeight}"></TextBox>
-        <Label Background="Coral" Foreground="WhiteSmoke" Grid.Row="4" Margin="150,0,0,0">SEARCHALGO:</Label>
-        <TextBox Grid.Row="4" Grid.Column="1" Name="SearchAlgo"  Margin="0,0.4,392.6,0.2" Text="{Binding VM_SearchAlgorithm}"></TextBox>
+
+        <Label Content="IP Address:"
+               Background="Coral" Foreground="WhiteSmoke"/>
+        <TextBox Text="{Binding VM_IP}" 
+                 Grid.Column="1" Grid.RowSpan="2"  />
+
+        <Label Content="Port:"
+            Grid.Row="1"
+            Background="Coral" Foreground="WhiteSmoke"/>
+        <TextBox Text="{Binding VM_Port}"
+                 Grid.Column="1" Grid.Row="1" />
+
+        <Label Content="Maze Columns"
+               Grid.Row="2"
+               Background="Coral" Foreground="WhiteSmoke"/>
+        <TextBox  Text="{Binding VM_MazeWidth}"
+                  Grid.Row="2" Grid.Column="1"/>
+
+        <Label Content="Height" 
+               Grid.Row="3"
+               Background="Coral" Foreground="WhiteSmoke" />
+        <TextBox Text="{Binding VM_MazeHeight}" 
+                 Grid.Row="3" Grid.Column="1" />
+
+        <Label Content="Search Algorithm"
+            Grid.Row="4" 
+            Background="Coral" Foreground="WhiteSmoke"/>
+        <TextBox Text="{Binding VM_SearchAlgorithm}" 
+                 Grid.Row="4" Grid.Column="1"/>
+
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2">
-            <Button Name="OkButton" Foreground="Green"  Content="Ok" Margin="250,20,420,0" Click="OkButton_Click" />
-            <Button Name="Cancel"  Foreground="Green" Content="Cancel" Margin="250,2,420,0" Click="Cancel_Click" />
+            <Button Name="OkButton" Content="Ok" Click="OkButton_Click" Margin="0,2"/>
+            <Button Name="Cancel" Content="Cancel" Click="Cancel_Click" />
         </StackPanel>
     </Grid>
 </Window>

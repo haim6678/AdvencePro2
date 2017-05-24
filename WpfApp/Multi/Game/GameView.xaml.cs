@@ -59,8 +59,11 @@ namespace WpfApp.Multi.Game
         /// </summary>
         private void GameStarted()
         {
-            MessageBox.Show("The game has started", "Game Started", MessageBoxButton.OK, MessageBoxImage.Information);
-            // TODO : unhide something that hides the screen.
+            this.Dispatcher.Invoke(() =>
+            {
+                waitLbl.Visibility = Visibility.Collapsed;
+                MessageBox.Show("The game has started", "Game Started", MessageBoxButton.OK, MessageBoxImage.Information);
+            });
         }
 
         /// <summary>

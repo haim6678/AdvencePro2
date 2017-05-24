@@ -11,21 +11,24 @@
         <ImageBrush ImageSource="../../Images/call_of_duty_black_ops_ii_2-wallpaper-1024x576.jpg"></ImageBrush>
     </Window.Background>
     <Viewbox>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Center">
-                <Label Content="my board" FontSize="20" Margin="0,0,300,0"/>
-                <Label Content="other player board" FontSize="20" Margin="100,0,0,0" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center">
-                <other:MazeDraw
+        <Grid>
+            <Label Name="waitLbl"  Content="Waiting for opponent..." FontSize="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <Label Content="My board" FontSize="20" HorizontalContentAlignment="Center"/>
+                    <other:MazeDraw
                     Maze="{Binding Path=VM_Maze}"
                     PlayerPos="{Binding Path=VM_MyPosition}"
-                    MinWidth="500" MinHeight="500" Margin="0,0,10,0"/>
-                <other:MazeDraw 
+                    MinWidth="500" MinHeight="500"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <Label Content="Opponent board" FontSize="20" HorizontalContentAlignment="Center" />
+                    <other:MazeDraw 
                     Maze="{Binding Path=VM_Maze}"
                     PlayerPos="{Binding Path=VM_OtherPosition}"
-                    MinWidth="500" MinHeight="500" Margin="10,0,0,0"/>
+                    MinWidth="500" MinHeight="500"/>
+                </StackPanel>
             </StackPanel>
-    </StackPanel>
+        </Grid>
     </Viewbox>
 </Window>

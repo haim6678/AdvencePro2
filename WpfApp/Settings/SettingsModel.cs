@@ -44,10 +44,7 @@ namespace WpfApp.Settings
         /// </value>
         public string IP
         {
-            get
-            {
-                return this.ip;
-            }
+            get { return this.ip; }
             set
             {
                 if (this.ip != value)
@@ -70,10 +67,7 @@ namespace WpfApp.Settings
         /// </value>
         public ushort Port
         {
-            get
-            {
-                return this.port;
-            }
+            get { return this.port; }
             set
             {
                 if (this.port != value)
@@ -96,10 +90,7 @@ namespace WpfApp.Settings
         /// </value>
         public uint MazeWidth
         {
-            get
-            {
-                return this.width;
-            }
+            get { return this.width; }
             set
             {
                 if (this.width != value)
@@ -122,10 +113,7 @@ namespace WpfApp.Settings
         /// </value>
         public uint MazeHeight
         {
-            get
-            {
-                return this.height;
-            }
+            get { return this.height; }
             set
             {
                 if (this.height != value)
@@ -148,10 +136,7 @@ namespace WpfApp.Settings
         /// </value>
         public byte SearchAlgorithm
         {
-            get
-            {
-                return this.searchAlg;
-            }
+            get { return this.searchAlg; }
             set
             {
                 if (this.searchAlg != value)

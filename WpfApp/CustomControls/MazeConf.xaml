@@ -18,7 +18,7 @@
 
         <Label Content="Maze Name:" 
                Grid.Row="0" Grid.Column="0"/>
-        <TextBox Name="txtName" Text="{Binding Path=MazeName}" MaxLength="3"
+        <TextBox Name="txtName" Text="{Binding Path=MazeName}" MaxLength="10"
                    Grid.Row="0" Grid.Column="1" MinWidth="75" Margin="0,2.5"/>
         <Label Content="Maze Rows:"
                Grid.Row="1" Grid.Column="0" />

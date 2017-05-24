@@ -38,7 +38,7 @@ namespace Server.View
                     bool keepCom;
                     do
                     {
-                        Console.WriteLine("Waiting for message from {0}", client.ToString());
+                        //Console.WriteLine("Waiting for message from {0}", client.ToString());
                         string command = client.ReadMessage();
                         CommandResult res = controller.ExecuteCommand(command, client);
                         keepCom = res.KeepConnection;
