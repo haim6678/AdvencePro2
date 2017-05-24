@@ -16,11 +16,21 @@ namespace WpfApp.Multi.Menu
 {
     /// <summary>
     /// Interaction logic for MultiMenu.xaml
+    /// the menu view
     /// </summary>
+    /// <seealso cref="System.Windows.Window" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class MultiMenu : Window
     {
+        /// <summary>
+        /// The vm
+        /// </summary>
         private MultiMenuVM vm;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiMenu"/> class.
+        /// </summary>
+        /// <param name="vm">The vm.</param>
         public MultiMenu(MultiMenuVM vm)
         {
             this.vm = vm;
@@ -28,6 +38,11 @@ namespace WpfApp.Multi.Menu
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Shows the dialog.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
         public bool? ShowDialog(out string command)
         {
             bool? dr = ShowDialog();
@@ -37,6 +52,11 @@ namespace WpfApp.Multi.Menu
             return dr;
         }
 
+        /// <summary>
+        /// Handles the Click event of the joinBtn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void joinBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ListBox.SelectedIndex < 0)
@@ -48,12 +68,22 @@ namespace WpfApp.Multi.Menu
             this.Close();
         }
 
+        /// <summary>
+        /// Handles the Click event of the startBtn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void startBtn_Click(object sender, RoutedEventArgs e)
         {
             vm.SetStartCommand();
             this.Close();
         }
 
+        /// <summary>
+        /// Handles the Click event of the refreshBtn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void refreshBtn_Click(object sender, RoutedEventArgs e)
         {
             vm.RefreshList();

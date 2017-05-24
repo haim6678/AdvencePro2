@@ -224,5 +224,8 @@
   <ItemGroup>
     <Resource Include="Images\thumb-1920-763357.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\call_of_duty_black_ops_ii_2-wallpaper-1024x576.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,17 +13,34 @@ using WpfApp.Single.Menu;
 
 namespace WpfApp.Single
 {
+    /// <summary>
+    ///  single player managing class
+    /// </summary>
     class SingleManager
     {
+        /// <summary>
+        /// The ip
+        /// </summary>
         private string ip;
+        /// <summary>
+        /// The port
+        /// </summary>
         private int port;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleManager"/> class.
+        /// </summary>
+        /// <param name="ip">The ip.</param>
+        /// <param name="port">The port.</param>
         public SingleManager(string ip, int port)
         {
             this.ip = ip;
             this.port = port;
         }
 
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
         public void Start()
         {
             string cmd = GetCommandFromMenu();
@@ -64,6 +81,10 @@ namespace WpfApp.Single
             view.ShowDialog();
         }
 
+        /// <summary>
+        /// Gets the command from menu.
+        /// </summary>
+        /// <returns></returns>
         private string GetCommandFromMenu()
         {
             // open multiplayer window

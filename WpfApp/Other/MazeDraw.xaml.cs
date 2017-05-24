@@ -19,21 +19,36 @@ namespace WpfApp.Other
 {
     /// <summary>
     /// Interaction logic for MazeDraw.xaml
+    /// the user control that draws the maze.
     /// </summary>
+    /// <seealso cref="System.Windows.Controls.UserControl" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class MazeDraw : UserControl
     {
         #region members
 
+        /// <summary>
+        /// Gets the player.
+        /// </summary>
+        /// <value>
+        /// The player.
+        /// </value>
         internal Rectangle Player { get; private set; }
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MazeDraw"/> class.
+        /// </summary>
         public MazeDraw()
         {
             Player = new Rectangle();
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
         public void Draw()
         {
             InitializeCanvas();
@@ -45,12 +60,20 @@ namespace WpfApp.Other
             DrawPlayer(recWidth, recHeight);
         }
 
+        /// <summary>
+        /// Initializes the canvas.
+        /// </summary>
         private void InitializeCanvas()
         {
             this.MyCanvas.Height = Maze.Rows;
             this.MyCanvas.Width = Maze.Cols;
         }
 
+        /// <summary>
+        /// Draws the board.
+        /// </summary>
+        /// <param name="recWidth">Width of the record.</param>
+        /// <param name="recHeight">Height of the record.</param>
         private void DrawBoard(double recWidth, double recHeight)
         {
             for (int i = 0; i < Maze.Rows; i++)
@@ -73,6 +96,11 @@ namespace WpfApp.Other
             }
         }
 
+        /// <summary>
+        /// Draws the goal.
+        /// </summary>
+        /// <param name="recWidth">Width of the record.</param>
+        /// <param name="recHeight">Height of the record.</param>
         private void DrawGoal(double recWidth, double recHeight)
         {
             ImageBrush goalBrush = new ImageBrush(new BitmapImage(
@@ -88,6 +116,11 @@ namespace WpfApp.Other
             Canvas.SetLeft(goal, Maze.GoalPos.Col);
         }
 
+        /// <summary>
+        /// Draws the player.
+        /// </summary>
+        /// <param name="recWidth">Width of the record.</param>
+        /// <param name="recHeight">Height of the record.</param>
         private void DrawPlayer(double recWidth, double recHeight)
         {
             ImageBrush player = new ImageBrush(new BitmapImage(
@@ -103,29 +136,56 @@ namespace WpfApp.Other
         }
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the maze.
+        /// </summary>
+        /// <value>
+        /// The maze.
+        /// </value>
         public Maze Maze
         {
             get { return (Maze)GetValue(MazeProperty); }
             set { SetValue(MazeProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Maze.  This enables animation, styling, binding, etc...
+        /// Using a DependencyProperty as the backing store for Maze.  
+        ///This enables animation, styling, binding, etc...
+        /// <summary>
+        /// The maze property
+        /// </summary>
         public static readonly DependencyProperty MazeProperty =
-            DependencyProperty.Register("Maze", typeof(Maze), typeof(MazeDraw), new UIPropertyMetadata(HandleNewMaze));
+            DependencyProperty.Register("Maze", typeof(Maze), typeof(MazeDraw), 
+                new UIPropertyMetadata(HandleNewMaze));
 
 
+        /// <summary>
+        /// Gets or sets the player position.
+        /// </summary>
+        /// <value>
+        /// The player position.
+        /// </value>
         public Position PlayerPos
         {
             get { return (Position)GetValue(PlayerPosProperty); }
             set { SetValue(PlayerPosProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for PlayerPos.  This enables animation, styling, binding, etc...
+        /// Using a DependencyProperty as the backing store for PlayerPos.
+        ///   This enables animation, styling, binding, etc...
+        /// <summary>
+        /// The player position property
+        /// </summary>
         public static readonly DependencyProperty PlayerPosProperty =
-            DependencyProperty.Register("PlayerPos", typeof(Position), typeof(MazeDraw), new UIPropertyMetadata(HandleNewPos));
-        
+            DependencyProperty.Register("PlayerPos", typeof(Position), typeof(MazeDraw), 
+                new UIPropertyMetadata(HandleNewPos));
+
         #endregion
 
+        /// <summary>
+        /// Handles the new maze.
+        /// </summary>
+        /// <param name="d">The d.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> 
         private static void HandleNewMaze(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Maze m = e.NewValue as Maze;
@@ -134,6 +194,11 @@ namespace WpfApp.Other
             md.Draw();
         }
 
+        /// <summary>
+        /// Handles the new position.
+        /// </summary>
+        /// <param name="d">The d.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/>
         private static void HandleNewPos(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Position s = (Position)e.NewValue;

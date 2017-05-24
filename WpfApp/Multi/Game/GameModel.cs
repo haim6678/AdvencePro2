@@ -13,22 +13,50 @@ using WpfApp.Settings;
 
 namespace WpfApp.Multi.Game
 {
+    /// <summary>
+    /// in charge of the multi logic
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="System.IDisposable" />
     public class GameModel : INotifyPropertyChanged, IDisposable
     {
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public delegate void GameStartedHandler();
+        /// <summary>
+        /// Occurs when [game started].
+        /// </summary>
         public event GameStartedHandler GameStarted;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reason">The reason.</param>
         public delegate void GameOverHandler(string reason);
+        /// <summary>
+        /// Occurs when [game over].
+        /// </summary>
         public event GameOverHandler GameOver;
 
         // events:  game started:
         //          game finished(reason):
         //              - win of player
         //              - exit of player
+        /// <summary>
+        /// The COM
+        /// </summary>
         private Communicator com;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameModel"/> class.
+        /// </summary>
+        /// <param name="commandToStart">The command to start.</param>
         public GameModel(string commandToStart)
         {
             this.maze = null;
@@ -43,7 +71,16 @@ namespace WpfApp.Multi.Game
         }
 
 
+        /// <summary>
+        /// The maze
+        /// </summary>
         private Maze maze;
+        /// <summary>
+        /// Gets the maze.
+        /// </summary>
+        /// <value>
+        /// The maze.
+        /// </value>
         public Maze Maze
         {
             get { return this.maze; }
@@ -56,7 +93,16 @@ namespace WpfApp.Multi.Game
             }
         }
 
+        /// <summary>
+        /// My position
+        /// </summary>
         private Position myPos;
+        /// <summary>
+        /// Gets my position.
+        /// </summary>
+        /// <value>
+        /// My position.
+        /// </value>
         public Position MyPosition
         {
             get { return myPos; }
@@ -67,7 +113,16 @@ namespace WpfApp.Multi.Game
             }
         }
 
+        /// <summary>
+        /// The other position
+        /// </summary>
         private Position otherPos;
+        /// <summary>
+        /// Gets the other position.
+        /// </summary>
+        /// <value>
+        /// The other position.
+        /// </value>
         public Position OtherPosition
         {
             get { return otherPos; }
@@ -78,11 +133,19 @@ namespace WpfApp.Multi.Game
             }
         }
 
+        /// <summary>
+        /// Handles the movement.
+        /// </summary>
+        /// <param name="d">The d.</param>
         public void HandleMovement(Direction d)
         {
             com.SendMessage("play " + d.ToString().ToLower());
         }
 
+        /// <summary>
+        /// Datas the received.
+        /// </summary>
+        /// <param name="data">The data.</param>
         private void DataReceived(string data)
         {
             Debug.WriteLine("Data Received: " + data);
@@ -99,6 +162,10 @@ namespace WpfApp.Multi.Game
             }
         }
 
+        /// <summary>
+        /// Handles the notification.
+        /// </summary>
+        /// <param name="n">The n.</param>
         private void HandleNotification(Notification n)
         {
             switch (n.NotificationType)
@@ -122,6 +189,11 @@ namespace WpfApp.Multi.Game
             }
         }
 
+        /// <summary>
+        /// Handles the command result.
+        /// </summary>
+        /// <param name="res">The resource.</param>
+        /// <exception cref="WpfApp.Multi.Game.GameNotStartedException"></exception>
         private void HandleCommandResult(CommandResult res)
         {
             if (res.Command != Command.Play)
@@ -138,11 +210,20 @@ namespace WpfApp.Multi.Game
             MyPosition = GetEstimatedPosition(MyPosition, d);
         }
 
+        /// <summary>
+        /// Closes the game.
+        /// </summary>
         public void CloseGame()
         {
             com.SendMessage("close " + Maze.Name);
         }
 
+        /// <summary>
+        /// Gets the estimated position.
+        /// </summary>
+        /// <param name="p">The p.</param>
+        /// <param name="d">The d.</param>
+        /// <returns></returns>
         private static Position GetEstimatedPosition(Position p, Direction d)
         {
             switch (d)
@@ -164,8 +245,15 @@ namespace WpfApp.Multi.Game
         }
 
         #region IDisposable Support
+        /// <summary>
+        /// The disposed value
+        /// </summary>
         private bool disposedValue = false; // To detect redundant calls
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -192,6 +280,9 @@ namespace WpfApp.Multi.Game
         // }
 
         // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

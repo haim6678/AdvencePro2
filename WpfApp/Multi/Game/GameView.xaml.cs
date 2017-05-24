@@ -16,11 +16,21 @@ namespace WpfApp.Multi.Game
 {
     /// <summary>
     /// Interaction logic for GameView.xaml
+    /// in charge of the multi view
     /// </summary>
+    /// <seealso cref="System.Windows.Window" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class GameView : Window
     {
+        /// <summary>
+        /// The vm
+        /// </summary>
         private GameVM vm;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameView"/> class.
+        /// </summary>
+        /// <param name="vm">The vm.</param>
         public GameView(GameVM vm)
         {
             InitializeComponent();
@@ -31,6 +41,10 @@ namespace WpfApp.Multi.Game
             vm.GameOver += GameOver;
         }
 
+        /// <summary>
+        /// Games the over.
+        /// </summary>
+        /// <param name="reason">The reason.</param>
         private void GameOver(string reason)
         {
             this.Dispatcher.Invoke(() =>
@@ -40,12 +54,20 @@ namespace WpfApp.Multi.Game
             });
         }
 
+        /// <summary>
+        /// Games the started.
+        /// </summary>
         private void GameStarted()
         {
             MessageBox.Show("The game has started", "Game Started", MessageBoxButton.OK, MessageBoxImage.Information);
             // TODO : unhide something that hides the screen.
         }
 
+        /// <summary>
+        /// Handles the key up.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void HandleKeyUp(object sender, KeyEventArgs e)
         {
             if (e != null)
@@ -54,6 +76,9 @@ namespace WpfApp.Multi.Game
             }
         }
 
+        /// <summary>
+        /// Closes the without event.
+        /// </summary>
         private void CloseWithoutEvent()
         {
             this.Closing -= Window_Closing;
@@ -61,6 +86,11 @@ namespace WpfApp.Multi.Game
             this.Closing += Window_Closing;
         }
 
+        /// <summary>
+        /// Handles the Closing event of the Window control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MessageBoxResult res = MessageBox.Show("Are you sure you want to close the game?", "Are You Sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);

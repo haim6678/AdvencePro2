@@ -7,15 +7,33 @@ using MazeLib;
 
 namespace WpfApp
 {
+    /// <summary>
+    ///  single player game - player class
+    /// </summary>
     class Player
     {
+        /// <summary>
+        /// Gets or sets the position.
+        /// </summary>
+        /// <value>
+        /// The position.
+        /// </value>
         public Position Position { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Player"/> class.
+        /// </summary>
+        /// <param name="p">The p.</param>
         public Player(Position p)
         {
             Position = p;
         }
 
+        /// <summary>
+        /// Gets the next location.
+        /// </summary>
+        /// <param name="s">The s.</param>
+        /// <returns></returns>
         public Position GetNextLocation(string s)
         {
             Direction d = ParseDirection(s);
@@ -39,6 +57,11 @@ namespace WpfApp
             return new Position(row, col);
         }
 
+        /// <summary>
+        /// Parses the direction.
+        /// </summary>
+        /// <param name="dirStr">The dir string.</param>
+        /// <returns></returns>
         private Direction ParseDirection(string dirStr)
         {
             Direction dir;

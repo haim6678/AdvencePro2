@@ -16,10 +16,20 @@ namespace WpfApp.Single.Menu
 {
     /// <summary>
     /// Interaction logic for SingleMenu.xaml
+    /// single player view
     /// </summary>
+    /// <seealso cref="System.Windows.Window" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class SingleMenu : Window
     {
+        /// <summary>
+        /// The vm
+        /// </summary>
         private SingleMenuVM vm;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleMenu"/> class.
+        /// </summary>
+        /// <param name="vm">The vm.</param>
         public SingleMenu(SingleMenuVM vm)
         {
             InitializeComponent();
@@ -27,6 +37,11 @@ namespace WpfApp.Single.Menu
             this.DataContext = this.vm;
         }
 
+        /// <summary>
+        /// Shows the dialog.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
         public bool? ShowDialog(out string command)
         {
             bool? dr = ShowDialog();
@@ -36,6 +51,11 @@ namespace WpfApp.Single.Menu
             return dr;
         }
 
+        /// <summary>
+        /// Handles the Click event of the startBtn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void startBtn_Click(object sender, RoutedEventArgs e)
         {
             vm.SetCommand();

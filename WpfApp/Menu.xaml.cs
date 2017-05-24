@@ -20,15 +20,26 @@ namespace WpfApp
 {
     /// <summary>
     /// Interaction logic for Menu.xaml
+    /// the main menu view.
     /// </summary>
+    /// <seealso cref="System.Windows.Window" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class Menu : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Menu"/> class.
+        /// </summary>
         public Menu()
         {
             InitializeComponent();
         }
 
 
+        /// <summary>
+        /// Handles the OnClick event of the Settings control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void Settings_OnClick(object sender, RoutedEventArgs e)
         {
             SettingsModel m = new SettingsModel();
@@ -37,6 +48,11 @@ namespace WpfApp
             settingView.ShowDialog();
         }
 
+        /// <summary>
+        /// Handles the OnClick event of the Multi control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void Multi_OnClick(object sender, RoutedEventArgs e)
         {
             string ip = SettingsManager.ReadSetting(SettingName.IP);
@@ -48,6 +64,11 @@ namespace WpfApp
             this.Show();
         }
 
+        /// <summary>
+        /// Handles the OnClick event of the Single control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void Single_OnClick(object sender, RoutedEventArgs e)
         {
             string ip = SettingsManager.ReadSetting(SettingName.IP);

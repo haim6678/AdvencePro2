@@ -7,11 +7,14 @@
         xmlns:other="clr-namespace:WpfApp.Other"
         mc:Ignorable="d"
         Title="GameView" KeyUp="HandleKeyUp" Closing="Window_Closing">
+    <Window.Background>
+        <ImageBrush ImageSource="../../Images/call_of_duty_black_ops_ii_2-wallpaper-1024x576.jpg"></ImageBrush>
+    </Window.Background>
     <Viewbox>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Center">
-                <Label Content="xd" />
-                <Label Content="ayy lmao" />
+                <Label Content="my board" FontSize="20" Margin="0,0,300,0"/>
+                <Label Content="other player board" FontSize="20" Margin="100,0,0,0" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center">
                 <other:MazeDraw

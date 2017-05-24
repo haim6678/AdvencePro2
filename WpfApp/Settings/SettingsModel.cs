@@ -8,10 +8,20 @@ using System.Threading.Tasks;
 
 namespace WpfApp.Settings
 {
+    /// <summary>
+    /// the setting window model
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class SettingsModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsModel"/> class.
+        /// </summary>
         public SettingsModel()
         {
             // initialize default fields by the app settings data.
@@ -26,6 +36,12 @@ namespace WpfApp.Settings
         /// the ip property
         /// </summary>
         private string ip;
+        /// <summary>
+        /// Gets or sets the ip.
+        /// </summary>
+        /// <value>
+        /// The ip.
+        /// </value>
         public string IP
         {
             get
@@ -46,6 +62,12 @@ namespace WpfApp.Settings
         /// the port property
         /// </summary>
         private ushort port;
+        /// <summary>
+        /// Gets or sets the port.
+        /// </summary>
+        /// <value>
+        /// The port.
+        /// </value>
         public ushort Port
         {
             get
@@ -62,7 +84,16 @@ namespace WpfApp.Settings
             }
         }
 
+        /// <summary>
+        /// The width
+        /// </summary>
         private uint width;
+        /// <summary>
+        /// Gets or sets the width of the maze.
+        /// </summary>
+        /// <value>
+        /// The width of the maze.
+        /// </value>
         public uint MazeWidth
         {
             get
@@ -79,7 +110,16 @@ namespace WpfApp.Settings
             }
         }
 
+        /// <summary>
+        /// The height
+        /// </summary>
         private uint height;
+        /// <summary>
+        /// Gets or sets the height of the maze.
+        /// </summary>
+        /// <value>
+        /// The height of the maze.
+        /// </value>
         public uint MazeHeight
         {
             get
@@ -96,7 +136,16 @@ namespace WpfApp.Settings
             }
         }
 
+        /// <summary>
+        /// The search alg
+        /// </summary>
         private byte searchAlg;
+        /// <summary>
+        /// Gets or sets the search algorithm.
+        /// </summary>
+        /// <value>
+        /// The search algorithm.
+        /// </value>
         public byte SearchAlgorithm
         {
             get
@@ -113,6 +162,9 @@ namespace WpfApp.Settings
             }
         }
 
+        /// <summary>
+        /// Saves the settings.
+        /// </summary>
         public void SaveSettings()
         {
             SettingsManager.UpdateSetting(SettingName.IP, IP);

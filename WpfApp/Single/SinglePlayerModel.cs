@@ -18,15 +18,36 @@ using Newtonsoft.Json;
 
 namespace WpfApp
 {
+    /// <summary>
+    ///  single player game model
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class SinglePlayerModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message">The message.</param>
         public delegate void GameOverHandler(string message);
+        /// <summary>
+        /// Occurs when [game over].
+        /// </summary>
         public event GameOverHandler GameOver;
 
+        /// <summary>
+        /// The solving
+        /// </summary>
         private volatile bool solving;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SinglePlayerModel"/> class.
+        /// </summary>
+        /// <param name="m">The m.</param>
         public SinglePlayerModel(Maze m)
         {
             this.Maze = m;
@@ -36,6 +57,9 @@ namespace WpfApp
 
         #region Solve
 
+        /// <summary>
+        /// Solves this instance.
+        /// </summary>
         public void Solve()
         {
             string cmd = SettingsManager.ReadSetting(SettingName.SearchAlgorithm);
@@ -61,6 +85,10 @@ namespace WpfApp
             new Task(() => AnimateSolution(sol)).Start();
         }
 
+        /// <summary>
+        /// Animates the solution.
+        /// </summary>
+        /// <param name="sol">The sol.</param>
         private void AnimateSolution(MazeSolution sol)
         {
             Position = Maze.InitialPos;
@@ -101,7 +129,16 @@ namespace WpfApp
 
         #region properties
 
+        /// <summary>
+        /// The maze
+        /// </summary>
         private Maze maze;
+        /// <summary>
+        /// Gets or sets the maze.
+        /// </summary>
+        /// <value>
+        /// The maze.
+        /// </value>
         public Maze Maze
         {
             get { return maze; }
@@ -112,7 +149,16 @@ namespace WpfApp
             }
         }
 
+        /// <summary>
+        /// The position
+        /// </summary>
         private Position position;
+        /// <summary>
+        /// Gets or sets the position.
+        /// </summary>
+        /// <value>
+        /// The position.
+        /// </value>
         public Position Position
         {
             get { return position; }
@@ -131,6 +177,10 @@ namespace WpfApp
 
         #region moveLogic
 
+        /// <summary>
+        /// Handles the movement.
+        /// </summary>
+        /// <param name="d">The d.</param>
         public void HandleMovement(Direction d)
         {
             if (solving)
@@ -145,6 +195,10 @@ namespace WpfApp
             }
         }
 
+        /// <summary>
+        /// Moves the specified d.
+        /// </summary>
+        /// <param name="d">The d.</param>
         private void Move(Direction d)
         {
             Position pos = GetEstimatedPosition(Position, d);
@@ -160,11 +214,20 @@ namespace WpfApp
 
         #endregion
 
+        /// <summary>
+        /// Restarts this instance.
+        /// </summary>
         public void Restart()
         {
             Position = Maze.InitialPos;
         }
 
+        /// <summary>
+        /// Gets the estimated position.
+        /// </summary>
+        /// <param name="p">The p.</param>
+        /// <param name="d">The d.</param>
+        /// <returns></returns>
         private static Position GetEstimatedPosition(Position p, Direction d)
         {
             switch (d)

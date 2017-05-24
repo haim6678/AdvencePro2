@@ -11,19 +11,36 @@ using WpfApp.Multi.Menu;
 
 namespace WpfApp.Multi
 {
+    /// <summary>
+    /// in charge of managing the multi game
+    /// </summary>
     class MultiManager
     {
+        /// <summary>
+        /// The ip
+        /// </summary>
         private string ip;
+        /// <summary>
+        /// The port
+        /// </summary>
         private int port;
         // operation: open menu. get needed operation.
         // then 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiManager"/> class.
+        /// </summary>
+        /// <param name="ip">The ip.</param>
+        /// <param name="port">The port.</param>
         public MultiManager(string ip, int port)
         {
             this.ip = ip;
             this.port = port;
         }
 
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
         public void Start()
         {
             string cmd = GetCommandFromMenu();
@@ -54,6 +71,10 @@ namespace WpfApp.Multi
             }
         }
 
+        /// <summary>
+        /// Gets the command from menu.
+        /// </summary>
+        /// <returns></returns>
         private string GetCommandFromMenu()
         {
             // open multiplayer window
