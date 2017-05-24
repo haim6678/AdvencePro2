@@ -77,14 +77,21 @@ namespace WpfApp.Multi
         /// <returns></returns>
         private string GetCommandFromMenu()
         {
-            // open multiplayer window
-            MultiMenuModel model = new MultiMenuModel();
-            MultiMenuVM vm = new MultiMenuVM(model);
-            MultiMenu mnu = new MultiMenu(vm);
+            try
+            {
+                // open multiplayer window
+                MultiMenuModel model = new MultiMenuModel();
+                MultiMenuVM vm = new MultiMenuVM(model);
+                MultiMenu mnu = new MultiMenu(vm);
 
-            string cmd;
-            mnu.ShowDialog(out cmd);
-            return cmd;
+                string cmd;
+                mnu.ShowDialog(out cmd);
+                return cmd;
+            }catch(Exception e)
+            {
+                MessageBox.Show("Error connecting to the server!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
         }
     }
 }
