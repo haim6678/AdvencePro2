@@ -215,7 +215,8 @@ namespace WpfApp.Multi.Game
         /// </summary>
         public void CloseGame()
         {
-            com.SendMessage("close " + Maze.Name);
+            string name = (Maze != null) ? Maze.Name : "thisgame";
+            com.SendMessage("close " + name);
         }
 
         /// <summary>

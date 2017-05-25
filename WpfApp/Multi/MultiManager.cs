@@ -65,7 +65,8 @@ namespace WpfApp.Multi
                     GameView gv = new GameView(gvm);
                     gv.ShowDialog();
                 }
-            }catch(GameNotStartedException e)
+            }
+            catch (GameNotStartedException e)
             {
                 MessageBox.Show(e.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -87,7 +88,8 @@ namespace WpfApp.Multi
                 string cmd;
                 mnu.ShowDialog(out cmd);
                 return cmd;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 MessageBox.Show("Error connecting to the server!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
